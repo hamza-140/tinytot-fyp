@@ -1,118 +1,193 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+/* 
+                                                ============================
+                                                | IMPORTS AND DEPENDENCIES |  
+                                                ============================
+*/
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StatusBar } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import MainMenu from './screens/Home/MainMenu';
+import Alphabets from './screens/English/Alphabets';
+import { Provider as AuthProvider } from './context/AuthContext';
+import EnglishHome from './screens/English/EnglishHome';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import YouTubePlayer from './components/YoutubePlayer';
+import LetterTracing from './screens/LetterTracing';
+import Signup from './screens/Signup/Signup';
+import KidProfileScreen from './screens/Kid/KidProfileScreen';
+import Tracing from './screens/English/Tracing';
+import { setNavigator } from './ref/navigationRef';
+import Login from './screens/Login/Login';
+import Checker from './screens/Checker';
+import Phonics from './screens/English/Phonics';
+import Vocabulary from './screens/English/Vocabulary';
+import MathHome from './screens/Math/MathHome';
+import WorkbookHome from './screens/Workbook/WorkbookHome';
+import PhonicsLessons from './screens/English/PhonicsLessons';
+import EnglishLessons from './screens/English/EnglishLessons';
+import Profile from './screens/Profile';
+import PhonicsHome from './screens/English/PhonicsHome';
+import PhonicsVideo from './screens/English/PhonicsVideo';
+import PhonicsVideoList from './screens/English/PhonicsVideoList';
+import MathLessons from './screens/Math/MathLessons';
+import Numbers from './screens/Math/Numbers';
+import EnglishQuiz from './screens/English/EnglishQuiz';
+import AlphabetGame from './screens/English/Alphabets/AlphabetGame';
+import IslamicHome from './screens/Islamic/IslamicHome';
+import EnglishLesson from './screens/English/Alphabets/EnglishLesson';
+import MathLesson from './screens/Math/MathLesson';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <AuthProvider>
+      <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
+        <StatusBar hidden={true} />
+        <Stack.Navigator
+          initialRouteName="Checker"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen
+            name="AlphabetGame"
+            component={AlphabetGame}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Checker"
+            component={Checker}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Tracing"
+            component={Tracing}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="KidProfile"
+            component={KidProfileScreen}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Main"
+            component={MainMenu}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="English"
+            component={EnglishHome}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="EnglishQuiz"
+            component={EnglishQuiz}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="EnglishLessons"
+            component={EnglishLessons}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="MathLessons"
+            component={MathLessons}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Math"
+            component={MathHome}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Islamic"
+            component={IslamicHome}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Workbook"
+            component={WorkbookHome}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="EnglishLesson"
+            component={EnglishLesson}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="MathLesson"
+            component={MathLesson}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Vocabulary"
+            component={Vocabulary}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Alphabets"
+            component={Alphabets}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Numbers"
+            component={Numbers}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Games"
+            component={YouTubePlayer}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Trace"
+            component={LetterTracing}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Phonics"
+            component={Phonics}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="PhonicsLessons"
+            component={PhonicsLessons}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="PhonicsHome"
+            component={PhonicsHome}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="PhonicsVideo"
+            component={PhonicsVideo}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="PhonicsVideoList"
+            component={PhonicsVideoList}
+            options={{ orientation: 'landscape' }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
   );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;

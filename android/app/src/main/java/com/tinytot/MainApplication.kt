@@ -1,4 +1,4 @@
-package com.tinytot
+package com.tinytot1
 
 import android.app.Application
 import com.facebook.react.PackageList

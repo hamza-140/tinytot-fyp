@@ -57,7 +57,7 @@ const App = () => {
           <Stack.Screen
             name="Checker"
             component={Checker}
-            options={{ orientation: 'landscape' }}
+            options={{ orientation: 'portrait' }}
           />
           <Stack.Screen
             name="Tracing"

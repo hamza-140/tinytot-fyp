@@ -37,6 +37,7 @@ import AlphabetGame from './screens/English/Alphabets/AlphabetGame';
 import IslamicHome from './screens/Islamic/IslamicHome';
 import EnglishLesson from './screens/English/Alphabets/EnglishLesson';
 import MathLesson from './screens/Math/MathLesson';
+import AlphabetLesson from './screens/English/AlphabetModule/AlphabetLesson';
 
 const Stack = createNativeStackNavigator();
 
@@ -77,6 +78,11 @@ const App = () => {
           <Stack.Screen
             name="KidProfile"
             component={KidProfileScreen}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="AlphabetLesson"
+            component={AlphabetLesson}
             options={{ orientation: 'landscape' }}
           />
           <Stack.Screen

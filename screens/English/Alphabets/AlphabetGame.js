@@ -65,7 +65,7 @@ const AlphabetGame = () => {
           </Animated.View>
 
           <Animated.View
-            {...panResponder2.panHandlers}
+            // {...panResponder2.panHandlers}
             style={[
               pan2.getLayout(),
               {

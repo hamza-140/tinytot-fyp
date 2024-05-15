@@ -47,6 +47,7 @@ const EnglishLesson = ({navigation}) => {
   }, []);
 
   const handleCardPress = item => {
+    navigation.navigate('AlphabetLesson', {item: item});
     console.log(item);
   };
   // Function to render lesson cards

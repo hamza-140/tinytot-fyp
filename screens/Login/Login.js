@@ -17,9 +17,10 @@ import {Context} from '../../context/AuthContext';
 */
 
 const Login = ({navigation}) => {
-  const {signin} = useContext(Context);
+  const {signin, state} = useContext(Context);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const errorMessage = state.errorMessage;
 
   /*
                                                 ======================
@@ -67,7 +68,6 @@ const Login = ({navigation}) => {
       <Animatable.Text animation="slideInDown" style={styles.title}>
         Parent Login
       </Animatable.Text>
-
       <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
         <Input
           value={email}
@@ -86,6 +86,7 @@ const Login = ({navigation}) => {
           style={{color: '#fff'}}
         />
       </Animatable.View>
+      {errorMessage ? <Text style={{color: 'red'}}>{errorMessage}</Text> : null}
 
       <Animatable.View animation="fadeInUp" delay={500}>
         <Button
@@ -147,6 +148,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#42b0f4',
     borderRadius: 8,
+    marginBottom: 30,
   },
 });
 

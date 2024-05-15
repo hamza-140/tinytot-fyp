@@ -3,8 +3,8 @@ import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {Context} from '../context/AuthContext';
-import { navigate } from '../ref/navigationRef';
-import { useNavigation } from '@react-navigation/native';
+import {navigate} from '../ref/navigationRef';
+import {useNavigation} from '@react-navigation/native';
 
 const Profile = ({navigation}) => {
   const [kidInfo, setKidInfo] = useState(null);
@@ -85,22 +85,21 @@ const Profile = ({navigation}) => {
             <Text style={styles.text}>{kidInfo?.gender || 'N/A'}</Text>
           </View>
           <View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              signout();
-            }}>
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.goBack(); // Navigate back to previous screen
-            }}>
-            <Text style={styles.buttonText}>Return</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                signout();
+              }}>
+              <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                navigation.goBack(); // Navigate back to previous screen
+              }}>
+              <Text style={styles.buttonText}>Return</Text>
+            </TouchableOpacity>
           </View>
-          
         </View>
       </View>
     </View>
@@ -152,6 +151,7 @@ const styles = StyleSheet.create({
     color: 'purple',
   },
   text: {
+    color: 'black',
     fontSize: 18,
     marginBottom: 15,
   },
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom:5,
+    marginBottom: 5,
   },
   buttonText: {
     color: 'white',

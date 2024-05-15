@@ -82,16 +82,22 @@ const signup =
       const userCredential = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
+      console.log('User account created & signed in!');
+
       const user = userCredential.user;
       const db = firebase.firestore();
-
+      const progress = {
+        english: {a: true, b: false},
+        math: {0: true, 1: false},
+      };
       await db
         .collection('parents')
         .doc(user.uid)
-        .set({name, email, password, kidInfo: {}});
+        .set({name, email, password, kidInfo: {}, ...progress});
 
       const token = user.uid;
       await Keychain.setGenericPassword('token', token);
+      console.log('here');
       dispatch({type: SIGNUP, payload: token});
       navigate('KidProfile', {parentId: user.uid});
     } catch (error) {
@@ -134,10 +140,22 @@ const signin =
       dispatch({type: SIGNUP, payload: token});
       navigate('Main');
     } catch (err) {
-      console.error(err);
+      console.error(err.code);
+      let errorMessage = 'Unable to sign in. Please try again.'; // Default error message
+
+      // Handle different error types
+      if (err.code === 'auth/invalid-credential') {
+        errorMessage = 'The email or password is wrong.';
+      } else if (err.code === 'auth/user-not-found') {
+        errorMessage = 'User not found. Please check your credentials.';
+      } else if (err.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.';
+      } else if (err.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your internet connection.';
+      }
       dispatch({
         type: ADD_ERROR,
-        payload: 'Unable to sign in. ',
+        payload: errorMessage,
       });
     }
   };
@@ -152,9 +170,21 @@ const signout = dispatch => async () => {
     navigate('Login');
   } catch (err) {
     console.error(err);
+    let errorMessage = 'Unable to sign in. Please try again.'; // Default error message
+
+    // Handle different error types
+    if (err.code === 'auth/invalid-email') {
+      errorMessage = 'The email address is badly formatted.';
+    } else if (err.code === 'auth/user-not-found') {
+      errorMessage = 'User not found. Please check your credentials.';
+    } else if (err.code === 'auth/wrong-password') {
+      errorMessage = 'Incorrect password. Please try again.';
+    } else if (err.code === 'auth/network-request-failed') {
+      errorMessage = 'Network error. Please check your internet connection.';
+    }
     dispatch({
       type: ADD_ERROR,
-      payload: 'Unable to sign out. Please try again.',
+      payload: errorMessage,
     });
   }
 };

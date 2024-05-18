@@ -5,7 +5,7 @@ import Card from '../../../components/Card';
 import Sound from 'react-native-sound';
 import AlphabetGame from '../Alphabets/AlphabetGame';
 import EnglishQuiz from '../EnglishQuiz';
-
+import CuteProgressBar from './CuteProgressBar';
 const AlphabetLesson = ({route}) => {
   const {item} = route.params;
 
@@ -52,7 +52,11 @@ const AlphabetLesson = ({route}) => {
         // Play the specific sound for the clicked letter
         // sound.setSpeed(0.5);
         sound.play(() => {
-          setProgress(25);
+          if (progress === 0) {
+            setProgress(25);
+          } else {
+            setProgress(progress);
+          }
 
           // Optionally, you can do something after the sound has finished playing
         });
@@ -88,14 +92,16 @@ const AlphabetLesson = ({route}) => {
     };
 
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'black'}}>{progress}</Text>
-        <Card
-          status={false}
-          letter={item}
-          onPress={() => start(item)}
-          imageSource={imageMapping[item]}
-        />
+      <View style={{}}>
+        <CuteProgressBar value={progress} />
+        <View style={{display: 'flex', alignItems: 'center'}}>
+          <Card
+            status={false}
+            letter={item}
+            onPress={() => start(item)}
+            imageSource={imageMapping[item]}
+          />
+        </View>
       </View>
     );
   };
@@ -116,9 +122,13 @@ const AlphabetLesson = ({route}) => {
       <View
         style={{
           flex: 1,
+          backgroundColor: 'purple',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <View>
+          <CuteProgressBar value={progress} />
+        </View>
         <Text style={{color: 'black'}}>{progress}</Text>
         <AlphabetGame />
       </View>
@@ -178,7 +188,7 @@ const AlphabetLesson = ({route}) => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          padding: 20,
+          paddingHorizontal: 20,
         }}>
         <TouchableOpacity onPress={handlePrevious} disabled={page === 1}>
           <Icon
@@ -198,22 +208,4 @@ const AlphabetLesson = ({route}) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // paddingTop: Constants.statusBarHeight,
-    backgroundColor: 'purple',
-    padding: 8,
-  },
-  progressBar: {
-    height: 20,
-    width: '100%',
-    backgroundColor: 'white',
-    borderColor: '#000',
-    borderWidth: 2,
-    borderRadius: 5,
-  },
-});
 export default AlphabetLesson;

@@ -5,12 +5,53 @@ import Card from '../../../components/Card';
 import Sound from 'react-native-sound';
 import AlphabetGame from '../Alphabets/AlphabetGame';
 import EnglishQuiz from '../EnglishQuiz';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import CuteProgressBar from './CuteProgressBar';
-const AlphabetLesson = ({route}) => {
+const AlphabetLesson = ({ route, navigation }) => {
+  const [progress, setProgress] = useState(0);
+
   const {item} = route.params;
+  const updateFirestore = async () => {
+    try {
+      const currentUser = auth().currentUser;
+      if (currentUser) {
+        const parentRef = firestore().collection('parents').doc(currentUser.uid);
+        const parentDoc = await parentRef.get();
+        const english = parentDoc.data().english;
+
+        // Determine the keys in the 'english' map and find the current and next items
+        const keys = Object.keys(english).sort();
+        console.log(keys.sort())
+        const currentIndex = keys.indexOf(item);
+        const nextItem = currentIndex < keys.length - 1 ? keys[currentIndex + 1] : null;
+
+        const updates = {
+          [`english.${item}.isCompleted`]: true,
+        };
+
+        if (nextItem) {
+          updates[`english.${nextItem}.status`] = true;
+        }
+
+        await parentRef.update(updates);
+        console.log(`Updated isCompleted for ${item} and status for ${nextItem}`);
+        navigation.navigate('EnglishLesson');
+      } else {
+        console.log('User not logged in');
+      }
+    } catch (error) {
+      console.log('Error updating Firestore:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (progress === 100) {
+      updateFirestore();
+    }
+  }, [progress]);
 
   console.log(item);
-  const [progress, setProgress] = useState(0);
   const FirstComponent = () => {
     const [sounds, setSounds] = useState({}); // Use an object to store sounds for each letter
 
@@ -93,7 +134,6 @@ const AlphabetLesson = ({route}) => {
 
     return (
       <View style={{}}>
-        <CuteProgressBar value={progress} />
         <View style={{display: 'flex', alignItems: 'center'}}>
           <Card
             status={false}
@@ -119,17 +159,13 @@ const AlphabetLesson = ({route}) => {
     }, []); // Empty dependency array ensures this effect runs only once
 
     return (
+      
       <View
         style={{
-          flex: 1,
-          backgroundColor: 'purple',
-          justifyContent: 'center',
-          alignItems: 'center',
+          flex:1,
+          justifyContent: 'center'
         }}>
-        <View>
-          <CuteProgressBar value={progress} />
-        </View>
-        <Text style={{color: 'black'}}>{progress}</Text>
+        
         <AlphabetGame />
       </View>
     );
@@ -149,7 +185,6 @@ const AlphabetLesson = ({route}) => {
 
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'black'}}>{progress}</Text>
         <EnglishQuiz />
       </View>
     );
@@ -183,6 +218,7 @@ const AlphabetLesson = ({route}) => {
 
   return (
     <View style={{flex: 1}}>
+      <CuteProgressBar value={progress}/>
       {renderComponent()}
       <View
         style={{

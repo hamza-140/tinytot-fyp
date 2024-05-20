@@ -38,6 +38,8 @@ import IslamicHome from './screens/Islamic/IslamicHome';
 import EnglishLesson from './screens/English/Alphabets/EnglishLesson';
 import MathLesson from './screens/Math/MathLesson';
 import AlphabetLesson from './screens/English/AlphabetModule/AlphabetLesson';
+import Workbook from './screens/Workbook/Workbook';
+import ParentComponent from './screens/Workbook/ParentComponent';
 
 const Stack = createNativeStackNavigator();
 
@@ -168,6 +170,11 @@ const App = () => {
           <Stack.Screen
             name="Phonics"
             component={Phonics}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Parent"
+            component={ParentComponent}
             options={{ orientation: 'landscape' }}
           />
           <Stack.Screen

@@ -7,7 +7,7 @@ const CuteProgressBar = ({value}) => {
   useEffect(() => {
     Animated.timing(progress, {
       toValue: value,
-      duration: 5000,
+      duration: 1000,
       useNativeDriver: false,
     }).start();
   }, [value]);

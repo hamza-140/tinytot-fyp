@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -11,7 +11,7 @@ import Card from './Card'; // Import your Card component here
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-const EnglishLesson = ({navigation}) => {
+const EnglishLesson = ({ navigation }) => {
   const [englishInfo, setEnglishInfo] = useState(null);
 
   useEffect(() => {
@@ -19,16 +19,15 @@ const EnglishLesson = ({navigation}) => {
       try {
         const currentUser = auth().currentUser;
         if (currentUser) {
-          const parentRef = firestore()
-            .collection('parents')
-            .doc(currentUser.uid);
+          const parentRef = firestore().collection('parents').doc(currentUser.uid);
           const parentDoc = await parentRef.get();
           if (parentDoc.exists) {
             const parentData = parentDoc.data();
             const english = parentData.english;
             if (english) {
-              console.log(english);
+              // const filteredEnglish = Object.entries(english).filter(([key, value]) => value.status === true);
               setEnglishInfo(english);
+              // console.log(english);
             } else {
               console.log('English info not found in parent doc');
             }
@@ -39,23 +38,24 @@ const EnglishLesson = ({navigation}) => {
           console.log('User not logged in');
         }
       } catch (error) {
-        console.log('Error fetching kid info:', error);
+        console.log('Error fetching English info:', error);
       }
     };
 
     fetchEnglishInfo();
-  }, []);
+  }, [navigation]);
 
-  const handleCardPress = item => {
-    navigation.navigate('AlphabetLesson', {item: item});
+  const handleCardPress = (item) => {
+    navigation.navigate('AlphabetLesson', { item: item });
     console.log(item);
   };
+
   // Function to render lesson cards
-  const renderLessonCards = ({item}) => (
+  const renderLessonCards = ({ item }) => (
     <Card
       letter={item[0]} // Assuming item is an array of key-value pairs
-      status={item[1]}
-      onPress={() => handleCardPress(item[0])} // Define handleCardPress if needed
+      status={item[1].status}
+      onPress={() => handleCardPress(item[0])}
       // Add other props as needed
     />
   );
@@ -66,7 +66,7 @@ const EnglishLesson = ({navigation}) => {
       style={styles.background}>
       <View style={styles.container}>
         <FlatList
-          data={englishInfo ? Object.entries(englishInfo).reverse() : []}
+          data={englishInfo ?  Object.entries(englishInfo).sort() : []}
           horizontal
           renderItem={renderLessonCards}
           keyExtractor={(item, index) => index.toString()} // Use index as key for now

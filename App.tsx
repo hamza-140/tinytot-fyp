@@ -13,7 +13,7 @@ import { Provider as AuthProvider } from './context/AuthContext';
 import EnglishHome from './screens/English/EnglishHome';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import YouTubePlayer from './components/YoutubePlayer';
-import LetterTracing from './screens/LetterTracing';
+import LetterTracing from './screens/English/AlphabetModule/LetterTracing';
 import Signup from './screens/Signup/Signup';
 import KidProfileScreen from './screens/Kid/KidProfileScreen';
 import Tracing from './screens/English/Tracing';
@@ -49,7 +49,7 @@ const App = () => {
       <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Checker"
+          initialRouteName="Trace"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen

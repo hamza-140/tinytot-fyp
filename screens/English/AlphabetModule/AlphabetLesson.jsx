@@ -8,6 +8,7 @@ import EnglishQuiz from '../EnglishQuiz';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import CuteProgressBar from './CuteProgressBar';
+import AlphabetQuiz from './AlphabetQuiz';
 const AlphabetLesson = ({ route, navigation }) => {
   const [progress, setProgress] = useState(0);
 
@@ -198,6 +199,8 @@ const AlphabetLesson = ({ route, navigation }) => {
       case 2:
         return <SecondComponent />;
       case 3:
+        return <AlphabetQuiz letter={item}/>
+      case 4:
         return <LastComponent />;
       default:
         return null;

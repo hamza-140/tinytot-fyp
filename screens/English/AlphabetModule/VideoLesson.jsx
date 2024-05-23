@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Alert, ActivityIndicator, StyleSheet,Text } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import firestore from '@react-native-firebase/firestore';
 
@@ -71,7 +71,7 @@ const VideoLesson = ({ letter,progress,setProgress }) => {
         />
       ) : (
         <View style={styles.errorContainer}>
-          <Text>No video available for this letter</Text>
+          <Text style={{color:'black'}}>No video available for this letter</Text>
         </View>
       )}
     </View>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   errorContainer: {
-    flex: 1,
+    display:'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },

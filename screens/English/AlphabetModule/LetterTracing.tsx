@@ -35,12 +35,24 @@ interface LetterTracingProps {
   setProgress: (progress: number) => void;
 }
 const {width, height} = Dimensions.get('window');
+const letterPathString = 'm380 340 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z';
+
+const scalePath = (pathString: string, scale: number): string => {
+  return pathString.replace(/([0-9.]+)/g, (match) => (parseFloat(match) * scale).toString());
+};
+
+const scaledLetterPathString = scalePath(letterPathString, 0.8); // Scale down to 80%
 
 const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) => {
+  
   const [isCompleted, setIsCompleted] = useState(0);
-  const letterPath = Skia.Path.MakeFromSVGString(
-    'm270 340 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z',
-  )!;
+  // const letterPath = Skia.Path.MakeFromSVGString(
+  //   'm270 310 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z',
+  // )!;
+  // const originalPath = 'm270 310 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z';
+  const letterPath = Skia.Path.MakeFromSVGString(scaledLetterPathString)!;
+  
+  // const letterPath = Skia.Path.MakeFromSVGString(scaledPath)!;
   const drawPath = useSharedValue(Skia.Path.Make());
 
   const gesture = Gesture.Pan()
@@ -61,7 +73,7 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) 
     });
 
   // useEffect(() => {
-  //   console.log(isCompleted)
+  //   console.log(width)
 
   // }, [isCompleted]);
 
@@ -90,7 +102,7 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <GestureDetector gesture={gesture}>
-        <ScrollView style={{flex: 1, flexDirection: 'column'}}>
+        <ScrollView style={{flex: 1, flexDirection: 'row'}}>
           <Canvas style={{flex: 1, width, height}}>
             <Fill color="#75DA" />
             {/* Letter black border */}

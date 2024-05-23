@@ -43,8 +43,13 @@ import ParentComponent from './screens/Workbook/ParentComponent';
 import AlphabetMatching from './screens/English/AlphabetModule/AlphabetMatching';
 
 const Stack = createNativeStackNavigator();
-
+type RootStackParamList = {
+  Trace: { progress: number; setProgress: (progress: number) => void };
+  // other screens
+};
 const App = () => {
+  const [progress, setProgress] = React.useState(0);
+
   return (
     <AuthProvider>
       <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
@@ -160,10 +165,11 @@ const App = () => {
             options={{ orientation: 'landscape' }}
           />
           <Stack.Screen
-            name="Trace"
-            component={LetterTracing}
-            options={{ orientation: 'landscape' }}
-          />
+        name="Trace"
+        options={{ orientation: 'landscape' }}
+      >
+        {props => <LetterTracing {...props} progress={progress} setProgress={setProgress} />}
+      </Stack.Screen>
           <Stack.Screen
             name="Profile"
             component={Profile}

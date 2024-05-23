@@ -46,7 +46,7 @@ const MainMenu = ({navigation, route}) => {
     if (id == 1) {
       sound.stop();
       setSimg(require('../../assets/soundOff.png'));
-      navigation.navigate('EnglishLesson');
+      navigation.navigate('English');
     } else if (id == 2) {
       sound.stop();
       setSimg(require('../../assets/soundOff.png'));

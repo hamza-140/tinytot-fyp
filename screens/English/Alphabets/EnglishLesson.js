@@ -79,7 +79,7 @@ const EnglishLesson = ({ navigation }) => {
         <TouchableOpacity
           style={styles.setting}
           onPress={() => {
-            navigation.navigate('Main');
+            navigation.navigate('English');
           }}>
           <Image
             source={require('../../../assets/back.png')}

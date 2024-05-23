@@ -14,7 +14,7 @@ import Card from '../../components/Card';
 const EnglishHome = ({navigation}) => {
   const start = id => {
     if (id == 1) {
-      navigation.navigate('EnglishLessons');
+      navigation.navigate('EnglishLesson');
     }
     if (id == 2) {
       navigation.navigate('AlphabetGame');

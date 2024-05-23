@@ -30,12 +30,16 @@ import {
 } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+interface LetterTracingProps {
+  progress: number;
+  setProgress: (progress: number) => void;
+}
 const {width, height} = Dimensions.get('window');
 
-export const App = () => {
+const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) => {
   const [isCompleted, setIsCompleted] = useState(0);
   const letterPath = Skia.Path.MakeFromSVGString(
-    'm270 358.2 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z',
+    'm270 340 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z',
   )!;
   const drawPath = useSharedValue(Skia.Path.Make());
 
@@ -69,6 +73,12 @@ export const App = () => {
     if (isCompleted > 185) {
       Alert.alert('YEAH!');
       Tts.speak("Well done!");
+      if(progress===40){
+        setProgress(60)
+      }
+      else{
+        setProgress(progress)
+      }
 
     }
     else{
@@ -139,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default LetterTracing;

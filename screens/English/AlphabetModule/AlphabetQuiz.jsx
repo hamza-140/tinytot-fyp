@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-const AlphabetQuiz = ({ route }) => {
-  const { letter } = route.params;
+const AlphabetQuiz = ({ letter,progress,setProgress }) => {
 
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -37,6 +35,12 @@ const AlphabetQuiz = ({ route }) => {
     if (option == questions[currentQuestion].answer) {
       // setScore(score + 1);
       Alert.alert('Correct!', 'Good job!');
+      if(progress===80){
+        setProgress(100)
+      }
+      else{
+        setProgress(progress)
+      }
     } else {
       Alert.alert('Incorrect', 'Try again.');
     }

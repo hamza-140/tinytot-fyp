@@ -40,6 +40,7 @@ import MathLesson from './screens/Math/MathLesson';
 import AlphabetLesson from './screens/English/AlphabetModule/AlphabetLesson';
 import Workbook from './screens/Workbook/Workbook';
 import ParentComponent from './screens/Workbook/ParentComponent';
+import AlphabetMatching from './screens/English/AlphabetModule/AlphabetMatching';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,7 +50,7 @@ const App = () => {
       <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Trace"
+          initialRouteName="Checker"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen
@@ -57,6 +58,7 @@ const App = () => {
             component={AlphabetGame}
             options={{ orientation: 'landscape' }}
           />
+          
           <Stack.Screen
             name="Checker"
             component={Checker}

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
-const AlphabetMatching = ({ route }) => {
-  const { letter } = route.params;
-  const [pairs, setPairs] = useState([]);
+const AlphabetMatching = ({ letter,progress,setProgress }) => {
+    // const {letter} = route.params;
+    const [pairs, setPairs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPair, setSelectedPair] = useState([]);
   const [matches, setMatches] = useState([]);
@@ -38,6 +38,12 @@ const AlphabetMatching = ({ route }) => {
         if (firstPair.match && secondPair.match && firstPair.char.toLowerCase() === secondPair.char.toLowerCase()) {
           setMatches([...matches, firstPair.id, secondPair.id]);
           Alert.alert('Match!', 'You found a match!');
+          if(progress===60){
+            setProgress(80)
+          }
+          else{
+            setProgress(progress)
+          }
         }
         setTimeout(() => setSelectedPair([]), 1000);
       }

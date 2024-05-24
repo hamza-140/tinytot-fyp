@@ -41,6 +41,9 @@ import AlphabetLesson from './screens/English/AlphabetModule/AlphabetLesson';
 import Workbook from './screens/Workbook/Workbook';
 import ParentComponent from './screens/Workbook/ParentComponent';
 import AlphabetMatching from './screens/English/AlphabetModule/AlphabetMatching';
+import Test from './Test';
+import ShareMe from './components/Share';
+// import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
 type RootStackParamList = {
@@ -62,6 +65,16 @@ const App = () => {
             name="AlphabetGame"
             component={AlphabetGame}
             options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Test"
+            component={Test}
+            options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="ShareMe"
+            component={ShareMe}
+            options={{ orientation: 'portrait' }}
           />
           
           <Stack.Screen
@@ -87,13 +100,18 @@ const App = () => {
           <Stack.Screen
             name="KidProfile"
             component={KidProfileScreen}
-            options={{ orientation: 'landscape' }}
+            options={{ orientation: 'portrait' }}
           />
           <Stack.Screen
             name="AlphabetLesson"
             component={AlphabetLesson}
             options={{ orientation: 'landscape' }}
           />
+          {/* <Stack.Screen
+            name="CardComponent"
+            component={CardComponent}
+            options={{ orientation: 'landscape' }}
+          /> */}
           <Stack.Screen
             name="Main"
             component={MainMenu}

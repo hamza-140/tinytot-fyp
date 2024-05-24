@@ -1,0 +1,29 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Bubble-Love-Demo.otf",
+      "sha1": "7f2e7104b075eb8e0be71b2e750c3c355a585999"
+    },
+    {
+      "path": "assets/fonts/Chicle-Regular.ttf",
+      "sha1": "4fce4ce9d2cd31533ff8ddd81ef35c0cfc122826"
+    },
+    {
+      "path": "assets/fonts/PFSquareSansPro-Bold-subset.otf",
+      "sha1": "5c8cd2e4ced67ad66d26856f33828bcaa3fd131b"
+    },
+    {
+      "path": "assets/fonts/PFSquareSansPro-Italic-subset.otf",
+      "sha1": "465630eb232e12b811dd782041f037569d8f465b"
+    },
+    {
+      "path": "assets/fonts/PFSquareSansPro-Medium-subset.otf",
+      "sha1": "93bb4cc802821b5525c2667ade1ba48846180ad9"
+    },
+    {
+      "path": "assets/fonts/PFSquareSansPro-Regular-subset.otf",
+      "sha1": "b7312f2456959c264f17ff74580222eab1921219"
+    }
+  ]
+}

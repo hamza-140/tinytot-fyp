@@ -126,6 +126,11 @@ const signup =
           7: { status: false, isCompleted: false },
           8: { status: false, isCompleted: false },
           9: { status: false, isCompleted: false }
+        },
+        islamiyat:{
+          1: { status: false, isCompleted: false },
+          2: { status: false, isCompleted: false },
+          3: { status: false, isCompleted: false },
         }
       };
       await db

@@ -6,9 +6,10 @@
 
 import React, {useContext, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
-import {Input, Button} from 'react-native-elements';
+import {Input} from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import {Context} from '../../context/AuthContext';
+import Button from '../../components/Button';
 
 /* 
                                                 ==================
@@ -89,7 +90,7 @@ const Login = ({navigation}) => {
       {errorMessage ? <Text style={{color: 'red'}}>{errorMessage}</Text> : null}
 
       <Animatable.View animation="fadeInUp" delay={500}>
-        <Button
+        {/* <Button
           disabled={!isEmailValid(email) || password.length < 6}
           title="Login"
           buttonStyle={styles.button}
@@ -98,7 +99,15 @@ const Login = ({navigation}) => {
             setEmail('');
             setPassword('');
           }}
-        />
+        /> */}
+        <Button onPress={()=>{
+          signin({email, password});
+          setEmail('');
+          setPassword('');
+        }} title='Login'
+        isDisabled={!isEmailValid(email) || password.length < 6} // Pass the disabled prop here
+
+        ></Button>
       </Animatable.View>
       <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
         <View style={{flexDirection: 'row'}}>
@@ -136,8 +145,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
+    fontFamily:'PFSquareSansPro-Bold-subset',
     fontSize: 36,
-    fontWeight: 'bold',
     marginBottom: 16,
     color: '#fff',
   },

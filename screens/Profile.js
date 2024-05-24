@@ -10,6 +10,9 @@ const Profile = ({navigation}) => {
   const [kidInfo, setKidInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const {signout} = useContext(Context);
+  [imageSrc, setImageSrc] = useState(
+    require('../assets/images/avatars/bear.png'),
+  );
   // const navigation = useNavigation();
 
   useEffect(() => {
@@ -45,7 +48,27 @@ const Profile = ({navigation}) => {
 
     fetchKidInfo();
   }, []);
-
+  useEffect(() => {
+    if (kidInfo?.avatarNo) {
+      switch (kidInfo.avatarNo) {
+        case 1:
+          setImageSrc(require('../assets/images/avatars/bear.png'));
+          break;
+        case 2:
+          setImageSrc(require('../assets/images/avatars/dog.png'));
+          break;
+        case 3:
+          setImageSrc(require('../assets/images/avatars/fox.png'));
+          break;
+        case 4:
+          setImageSrc(require('../assets/images/avatars/penguin.png'));
+          break;
+        default:
+          setImageSrc(require('../assets/images/avatars/bear.png'));
+          break;
+      }
+    }
+  }, [kidInfo]);
   // Dummy UserModel data
   const dummyUser = {
     signedInUser: {
@@ -64,10 +87,7 @@ const Profile = ({navigation}) => {
       </View>
       <View style={styles.content}>
         <View style={styles.userInfo}>
-          <Image
-            source={{uri: dummyUser.signedInUser.image}}
-            style={styles.avatar}
-          />
+          <Image source={imageSrc} style={styles.avatar} />
           <View style={styles.textContainer}>
             <Text style={styles.label}>Name:</Text>
             <Text style={styles.text}>{kidInfo?.name || 'N/A'}</Text>
@@ -91,6 +111,16 @@ const Profile = ({navigation}) => {
                 signout();
               }}>
               <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate('KidProfile', {
+                  parentId: auth().currentUser.uid,
+                  kidInfo: kidInfo || {},
+                });
+              }}>
+              <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}

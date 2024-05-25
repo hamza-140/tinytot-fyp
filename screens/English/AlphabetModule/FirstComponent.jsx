@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Card from '../../../components/Card';
 import Sound from 'react-native-sound';
+import Tts from 'react-native-tts';
+import LottieView from 'lottie-react-native';
 
 const FirstComponent = ({ item, setProgress, progress }) => {
   const [sounds, setSounds] = useState({});
 
   useEffect(() => {
+    setTimeout(() => {
+      Tts.speak("Click On the Screen!");
+    }, 1000);
+    
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
     const loadedSounds = {};
 
@@ -77,10 +83,28 @@ const FirstComponent = ({ item, setProgress, progress }) => {
 
 
   return (
-    <View style={{ display: 'flex', alignItems: 'center' }}>
+    <View style={{ display: 'flex', alignItems: 'center',marginTop:20 }}>
       <Card status={false} letter={item} onPress={() => start(item)} imageSource={imageMapping[item]} />
+      <LottieView
+                source={require('../../../assets/animations/panda.json')}
+                autoPlay
+                loop={true}
+                style={styles.animation}
+                
+              />
     </View>
   );
 };
 
 export default FirstComponent;
+
+const styles = StyleSheet.create({
+  animation: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    width: 110,
+    height: 110,
+    zIndex: 1,
+  },
+})

@@ -125,7 +125,7 @@ const Profile = ({navigation}) => {
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                navigation.goBack(); // Navigate back to previous screen
+                navigation.navigate('Main'); // Navigate back to previous screen
               }}>
               <Text style={styles.buttonText}>Return</Text>
             </TouchableOpacity>

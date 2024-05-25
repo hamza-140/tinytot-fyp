@@ -19,7 +19,7 @@ const Menu = ({navigation}) => {
     try {
       const result = await Share.share({
         message: 'Check out this amazing kids learning app - Tinytot!',
-        url: 'https://www.example.com/tinytot', // Replace with your app's website or download link
+        url: 'https://www.instagram.com/20s.hamza', // Replace with your app's website or download link
         title: 'Tinytot - Kids Learning App',
       });
       if (result.action === Share.sharedAction) {
@@ -216,7 +216,7 @@ const Menu = ({navigation}) => {
                 <Text style={styles.sectionHeader}>5. Contact Us</Text>
                 {'\n'}
                 For any questions or concerns about these terms, please contact
-                us at support@tinytot.com.{'\n'}
+                us at sahamzashah19@gmail.com.{'\n'}
                 {'\n'}
                 <Text style={styles.sectionTitle}>Privacy Policy</Text>
                 {'\n'}
@@ -307,7 +307,7 @@ const Menu = ({navigation}) => {
                 <Text style={styles.sectionHeader}>8. Contact Us</Text>
                 {'\n'}
                 If you have any questions or concerns about this privacy policy,
-                please contact us at privacy@tinytot.com.
+                please contact us at sahamzashah19@gmail.com.
               </Text>
               <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                 <Text style={styles.closeButtonText}>Close</Text>

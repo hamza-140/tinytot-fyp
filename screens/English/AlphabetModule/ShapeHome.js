@@ -10,9 +10,12 @@ import LastComponent from './LastComponent';
 import AlphabetQuiz from './AlphabetQuiz';
 import VideoLesson from './VideoLesson';
 import LetterTracing from './LetterTracing';
-import AlphabetMatching from './AlphabetMatching';
+import AlphabetMatching from './AlphabetMatching';  
+import ShapeLesson from './ShapeLesson';
+import ShapeDraw from './ShapeDraw';
+import { Text } from 'react-native';
 
-const AlphabetLesson = ({route, navigation}) => {
+const ShapeHome = ({route, navigation}) => {
   const [progress, setProgress] = useState(0);
   const {item} = route.params;
 
@@ -52,11 +55,11 @@ const AlphabetLesson = ({route, navigation}) => {
     }
   };
 
-  useEffect(() => {
-    if (progress === 100) {
-      updateFirestore();
-    }
-  }, [progress]);
+//   useEffect(() => {
+//     if (progress === 100) {
+//       updateFirestore();
+//     }
+//   }, [progress]);
 
   const [page, setPage] = useState(1);
 
@@ -64,24 +67,14 @@ const AlphabetLesson = ({route, navigation}) => {
     switch (page) {
       case 1:
         return (
-          <FirstComponent
+          <ShapeLesson
             item={item}
-            setProgress={setProgress}
-            progress={progress}
           />
         );
+        break;
       case 2:
-        return <VideoLesson letter={item} setProgress={setProgress}
-        progress={progress} />; // Add VideoLesson component
-      case 3:
-        return <LetterTracing setProgress={setProgress}
-        progress={progress} />; // Add VideoLesson component
-      case 4:
-        return       <AlphabetMatching letter={item.toUpperCase()} progress={progress} setProgress={setProgress} />;
-      // case 3:
-      //   return <AlphabetQuiz letter={item} />;
-      case 5:
-        return <AlphabetQuiz progress={progress} letter={item} setProgress={setProgress} />;
+        return <ShapeDraw svg={item.svg}/>; // Add VideoLesson component
+        break;
       default:
         return null;
     }
@@ -94,7 +87,7 @@ const AlphabetLesson = ({route, navigation}) => {
   };
 
   const handleNext = () => {
-    if (page < 5) {
+    if (page < 2) {
       setPage(page + 1);
     }
   };
@@ -109,15 +102,15 @@ const AlphabetLesson = ({route, navigation}) => {
             color={page === 1 ? 'gray' : 'black'}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext} disabled={page === 5}>
+        <TouchableOpacity style={styles.nextButton} onPress={handleNext} disabled={page === 2}>
           <Icon
             name="arrow-right"
             size={30}
-            color={page === 5 ? 'gray' : 'black'}
+            color={page === 2 ? 'gray' : 'black'}
           />
         </TouchableOpacity>
       </View>
-      <CuteProgressBar value={progress} />
+      <View style={{marginBottom:50}}></View>
       {renderComponent()}
       
     </ImageBackground>
@@ -150,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlphabetLesson;
+export default ShapeHome;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, ActivityIndicator, StyleSheet,Text } from 'react-native';
+import { View, Alert, ActivityIndicator, StyleSheet,Text ,Dimensions} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import firestore from '@react-native-firebase/firestore';
 
@@ -9,6 +9,9 @@ const extractVideoId = (url) => {
 };
 
 const VideoLesson = ({ letter,progress,setProgress }) => {
+  const { width, height } = Dimensions.get('window');
+  const videoHeight = height * 0.973;  // 40% of the device height
+  const videoWidth = width;    // 90% of the device width
   const [playing, setPlaying] = useState(false);
   const [videoId, setVideoId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +67,8 @@ const VideoLesson = ({ letter,progress,setProgress }) => {
     <View>
       {videoId ? (
         <YoutubePlayer
-          height={350}
+          height={videoHeight}
+          width={videoWidth}
           play={playing}
           videoId={videoId}
           onChangeState={onStateChange}
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   errorContainer: {

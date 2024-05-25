@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 
-const CardComponent = ({title, color, onPress, id,bg}) => {
+const CardComponent = ({title, color, onPress, image, id, bg}) => {
   const [imgSrc, setImageSrc] = useState(
     require('../assets/images/menu/workbook.png'),
   );
+
   useEffect(() => {
-    
     if (id) {
       switch (Number(id)) {
         case 1:
@@ -29,11 +29,11 @@ const CardComponent = ({title, color, onPress, id,bg}) => {
   }, [id]);
 
   return (
-    <View style={[styles.card,{backgroundColor:bg}]}>
+    <View style={[styles.card, {backgroundColor: bg}]}>
       <View style={styles.imageContainer}>
         <Image
-          source={imgSrc} // Replace with your image path
-          style={styles.image}
+          source={image ? {uri: image} : imgSrc}
+          style={id==2 ? [styles.image,{marginTop:0}]:styles.image}
         />
       </View>
       <TouchableOpacity
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
   card: {
     width: 300,
     height: 180,
-    // backgroundColor: '#FEDABC',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 5,
-    marginRight:40,
+    marginRight: 40,
     padding: 20,
   },
   imageContainer: {
@@ -71,12 +70,12 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 180,
+    marginTop:20,
     height: 180,
     resizeMode: 'contain',
     marginBottom: 20,
   },
   button: {
-    // backgroundColor: {},
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: 'center',
+    textTransform: 'capitalize',
     color: '#fff',
     fontSize: 16,
     fontFamily: 'PFSquareSansPro-Bold-subset',

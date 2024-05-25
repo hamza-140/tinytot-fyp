@@ -10,6 +10,7 @@ import {
   BackHandler,
 } from 'react-native';
 import Card from '../../components/Card';
+import CardMenu from '../../components/CardMenu';
 
 const EnglishHome = ({navigation}) => {
   const start = id => {
@@ -17,21 +18,24 @@ const EnglishHome = ({navigation}) => {
       navigation.navigate('EnglishLesson');
     }
     if (id == 2) {
-      navigation.navigate('AlphabetGame');
+      navigation.navigate('PhonicsHome');
     }
-    if (id == 4) {
-      navigation.navigate('EnglishQuiz');
+    if (id == 3) {
+      navigation.navigate('Shape');
+    }
+    if(id==4){
+      navigation.navigate('Animals')
     }
     
   };
   const data = [
-    {id: '1', title: 'Lessons'},
-    {id: '2', title: 'Alphabet Game'},
-    {id: '3', title: 'Stories'},
-    {id: '4', title: 'Quiz'},
+    {id: '1', title: 'Lessons',bg:'#FF6F61',img:1},
+    {id: '2', title: 'Phonics',bg:'#800080',img:2},
+    {id: '3', title: 'Shapes',bg:'#1E90FF',img:3},
+    {id: '4', title: 'Animals',bg:"#FFA500",img:4},
   ];
   const renderCard = ({item}) => (
-    <Card letter={item.title} onPress={() => start(item.id)} heading1={true} />
+    <CardMenu letter={item.title} onPress={() => start(item.id)} bg={item.bg} img={item.img}/>
   );
 
   return (
@@ -42,6 +46,7 @@ const EnglishHome = ({navigation}) => {
         <FlatList
           data={data}
           horizontal
+          showsHorizontalScrollIndicator={false}
           renderItem={renderCard}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.flatListContainer}

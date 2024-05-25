@@ -110,7 +110,7 @@ const KidProfileScreen = ({ navigation, route }) => {
         <Slider
           style={styles.slider}
           minimumValue={3}
-          maximumValue={8}
+          maximumValue={7}
           step={1}
           value={age}
           onValueChange={(value) => setAge(value)}

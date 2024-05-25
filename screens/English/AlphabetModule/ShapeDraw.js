@@ -10,6 +10,9 @@ import {
 } from 'react-native';
 import Tts from 'react-native-tts';
 
+
+import { useNavigation } from '@react-navigation/native';
+
 import {
   Canvas,
   Fill,
@@ -32,15 +35,28 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 const {width, height} = Dimensions.get('window');
-const letterPathString = 'M 0 0 L 500 0 L 500 250 L 0 250 Z';
 
+const ShapeDraw= ({ svg}) => {
+    const navigate = useNavigation()
+    const canvasWidth = 840; // Width of the canvas
+const canvasHeight = 420; // Height of the canvas
+
+// Calculate the coordinates for the rectangle
+const rectWidth = 400; // Width of the rectangle
+const rectHeight = 200; // Height of the rectangle
+
+// Calculate the position of the rectangle to center it horizontally
+const rectX = (canvasWidth - rectWidth) / 2; // X-coordinate for the top-left corner of the rectangle
+const rectY = (canvasHeight - rectHeight) / 2; // Y-coordinate for the top-left corner of the rectangle
+
+// Define the path string for the rectangle
+const letterPathString = svg;
 const scalePath = (pathString, scale) => {
   return pathString.replace(/([0-9.]+)/g, (match) => (parseFloat(match) * scale).toString());
 };
 
 const scaledLetterPathString = scalePath(letterPathString, 0.8); // Scale down to 80%
 
-const LetterTracing= ({ }) => {
   const [drawColor, setDrawColor] = useState("#FA00FF"); // Initial color for drawing
   
   // Other code remains unchanged
@@ -75,15 +91,18 @@ const LetterTracing= ({ }) => {
       runOnJS(setIsCompleted)(drawPath.value.countPoints());
     });
 
-  // useEffect(() => {
-  //   console.log(width)
+  useEffect(() => {
+    Tts.speak("Draw the Shape!")
 
-  // }, [isCompleted]);
+  }, []);
 
   const resetDrawing = () => {
     drawPath.value = Skia.Path.Make();
     setIsCompleted(0);
   };
+  const returnHome = () => {
+    navigate.navigate('Shape');
+};
   const checkDrawing = () => {
     if (isCompleted > 185) {
       Alert.alert('YEAH!');
@@ -103,7 +122,7 @@ const LetterTracing= ({ }) => {
       <GestureDetector gesture={gesture}>
         <ScrollView style={{flex: 1, flexDirection: 'row'}}>
           <Canvas style={{flex: 1, width, height}}>
-            <Fill color="#75DA" />
+            {/* <Fill /> */}
             {/* Letter black border */}
             <Path path={letterPath} color="black" strokeWidth={10}>
               <Morphology radius={6} />
@@ -131,11 +150,12 @@ const LetterTracing= ({ }) => {
       </GestureDetector>
       
       <TouchableOpacity style={styles.resetButton} onPress={resetDrawing}>
-        <Icon name="refresh" size={30} color="#fe0000" />
+        <Icon name="refresh" size={30} color="#fff" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.checkButton} onPress={checkDrawing}>
-        <Icon name="check-circle-outline" size={30} color="#03fe1c" />
+      <TouchableOpacity style={styles.checkButton} onPress={returnHome}>
+        <Icon name="home" size={30} color="#fff" />
       </TouchableOpacity>
+      
     </GestureHandlerRootView>
   );
 };
@@ -145,7 +165,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     right: 30,
-    backgroundColor: 'white',
+    backgroundColor: '#fe0000',
     borderRadius: 50,
     padding: 10,
     elevation: 5,
@@ -154,11 +174,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 30,
     left: 30,
-    backgroundColor: 'white',
+    backgroundColor: 'teal',
     borderRadius: 50,
     padding: 10,
     elevation: 5,
   },
 });
 
-export default LetterTracing;
+export default ShapeDraw;

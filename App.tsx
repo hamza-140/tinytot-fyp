@@ -43,6 +43,9 @@ import ParentComponent from './screens/Workbook/ParentComponent';
 import AlphabetMatching from './screens/English/AlphabetModule/AlphabetMatching';
 import Test from './Test';
 import ShareMe from './components/Share';
+import Shape from './screens/English/AlphabetModule/Shape';
+import Animals from './screens/English/AlphabetModule/Animals';
+import ShapeHome from './screens/English/AlphabetModule/ShapeHome';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -74,13 +77,18 @@ const App = () => {
           <Stack.Screen
             name="ShareMe"
             component={ShareMe}
-            options={{ orientation: 'portrait' }}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="ShapeHome"
+            component={ShapeHome}
+            options={{ orientation: 'landscape' }}
           />
           
           <Stack.Screen
             name="Checker"
             component={Checker}
-            options={{ orientation: 'portrait' }}
+            options={{ orientation: 'landscape' }}
           />
           <Stack.Screen
             name="Tracing"
@@ -196,6 +204,16 @@ const App = () => {
           <Stack.Screen
             name="Phonics"
             component={Phonics}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Shape"
+            component={Shape}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
+            name="Animals"
+            component={Animals}
             options={{ orientation: 'landscape' }}
           />
           <Stack.Screen

@@ -1725,6 +1725,11 @@
   resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-19.2.2.tgz"
   integrity sha512-wROOJSoCdE8UpVzBtN/F/kDIVKK9xJnCs+8vzD3AWirSJEy4bIj4nGQhTag2IZtabQPHXTo8w3TIYNjlYesjtQ==
 
+"@react-native-masked-view/masked-view@^0.2.8", "@react-native-masked-view/masked-view@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/@react-native-masked-view/masked-view/-/masked-view-0.3.1.tgz"
+  integrity sha512-uVm8U6nwFIlUd1iDIB5cS+lDadApKR+l8k4k84d9hn+GN4lzAIJhUZ9syYX7c022MxNgAlbxoFLt0pqKoyaAGg==
+
 "@react-native-picker/picker@^2.7.6":
   version "2.7.6"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.7.6.tgz"
@@ -6046,6 +6051,11 @@ react-native-keychain@^8.2.0:
   resolved "https://registry.npmjs.org/react-native-keychain/-/react-native-keychain-8.2.0.tgz"
   integrity sha512-SkRtd9McIl1Ss2XSWNLorG+KMEbgeVqX+gV+t3u1EAAqT8q2/OpRmRbxpneT2vnb/dMhiU7g6K/pf3nxLUXRvA==
 
+react-native-linear-gradient@^2.5.6, react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
+
 react-native-ratings@8.0.4:
   version "8.0.4"
   resolved "https://registry.npmjs.org/react-native-ratings/-/react-native-ratings-8.0.4.tgz"
@@ -6092,6 +6102,11 @@ react-native-size-matters@^0.3.1:
   resolved "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
 
+react-native-skeleton-placeholder@^5.2.4:
+  version "5.2.4"
+  resolved "https://registry.npmjs.org/react-native-skeleton-placeholder/-/react-native-skeleton-placeholder-5.2.4.tgz"
+  integrity sha512-OZntVq1hU1UX33FltxK2ezT2v9vHIhV8YnEbnMWUCvxT0N9OsgD1qxiHm6qb9YRJVgq2o5z3S7dNPsPnDF/jNg==
+
 react-native-sound@^0.11.2:
   version "0.11.2"
   resolved "https://registry.npmjs.org/react-native-sound/-/react-native-sound-0.11.2.tgz"
@@ -6132,7 +6147,7 @@ react-native-youtube@^2.0.2:
   dependencies:
     prop-types "^15.5.0"
 
-react-native@*, react-native@>=0.46, react-native@>=0.60, react-native@>=0.64, react-native@>=0.8.0, react-native@0.74.1:
+react-native@*, react-native@>=0.46, react-native@>=0.50.1, react-native@>=0.57, react-native@>=0.60, react-native@>=0.64, react-native@>=0.8.0, react-native@0.74.1:
   version "0.74.1"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.1.tgz"
   integrity sha512-0H2XpmghwOtfPpM2LKqHIN7gxy+7G/r1hwJHKLV6uoyXGC/gCojRtoo5NqyKrWpFC8cqyT6wTYCLuG7CxEKilg==
@@ -6205,7 +6220,7 @@ react-test-renderer@18.2.0:
     react-shallow-renderer "^16.15.0"
     scheduler "^0.23.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.0.0, react@^18.2.0, react@>=16.8, react@>=16.8.6, react@>=17.0.0, react@>=18.0, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.0.0, react@^18.2.0, react@>=0.14.8, react@>=16, react@>=16.8, react@>=16.8.6, react@>=17.0.0, react@>=18.0, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==

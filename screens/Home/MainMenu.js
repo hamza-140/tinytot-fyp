@@ -1,5 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
+import { useIsFocused } from '@react-navigation/native';
+
+
 import {
   StyleSheet,
   Text,
@@ -19,6 +22,7 @@ import Menu from './Menu'; // Adjust the import based on your file structure
 import CardComponent from '../../components/CardComponent';
 import auth from '@react-native-firebase/auth';
 const MainMenu = ({navigation, route}) => {
+  const isFocused = useIsFocused()
   const {signout} = useContext(Context);
   const [kidName, setKidName] = useState('');
   const [sound, setSound] = useState(null);
@@ -28,27 +32,27 @@ const MainMenu = ({navigation, route}) => {
 
   const start = id => {
     if (id == 1) {
-      sound.stop();
+//      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('English');
     } else if (id == 2) {
-      sound.stop();
+////      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('MathLesson');
     } else if (id == 3) {
-      sound.stop();
+//      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Islamic');
     } else if (id == 4) {
-      sound.stop();
+//      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Workbook');
     } else if (id == 5) {
-      sound.stop();
+//      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Workbook');
     } else {
-      sound.stop();
+//      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Profile');
     }
@@ -93,7 +97,7 @@ const MainMenu = ({navigation, route}) => {
     };
 
     fetchKidInfo();
-  }, []);
+  }, [isFocused]);
   useEffect(() => {
     if (kidInfo?.avatarNo) {
       switch (kidInfo.avatarNo) {
@@ -136,7 +140,7 @@ const MainMenu = ({navigation, route}) => {
   //   // Unload the sound when the component is unmounted
   //   return () => {
   //     if (sound) {
-  //       sound.stop();
+  // //      sound.stop();
   //       sound.release();
   //       setSound(null);
   //     }
@@ -146,7 +150,7 @@ const MainMenu = ({navigation, route}) => {
   const handleToggleSoundButtonPress = () => {
     if (sound) {
       if (sound.isPlaying()) {
-        sound.stop();
+  //      sound.stop();
         setSimg(require('../../assets/soundOff.png'));
       } else {
         // If sound is not playing, start it
@@ -197,6 +201,8 @@ const MainMenu = ({navigation, route}) => {
           <FlatList
             data={data}
             horizontal
+            showsHorizontalScrollIndicator={false}
+
             renderItem={renderCard}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.flatListContainer}

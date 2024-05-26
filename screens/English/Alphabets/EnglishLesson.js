@@ -10,6 +10,7 @@ import {
 import Card from './Card'; // Import your Card component here
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import LessonCard from './LessonCard';
 
 const EnglishLesson = ({ navigation }) => {
   const [englishInfo, setEnglishInfo] = useState(null);
@@ -52,12 +53,13 @@ const EnglishLesson = ({ navigation }) => {
 
   // Function to render lesson cards
   const renderLessonCards = ({ item }) => (
-    <Card
-      letter={item[0]} // Assuming item is an array of key-value pairs
-      status={item[1].status}
-      onPress={() => handleCardPress(item[0])}
-      // Add other props as needed
-    />
+    // <Card
+    //   letter={item[0]} // Assuming item is an array of key-value pairs
+    //   status={item[1].status}
+    //   onPress={() => handleCardPress(item[0])}
+    //   // Add other props as needed
+    // />
+    <LessonCard title={item[0]} status={item[1].status} onPress={()=>handleCardPress(item[0])}></LessonCard>
   );
 
   return (
@@ -68,6 +70,7 @@ const EnglishLesson = ({ navigation }) => {
         <FlatList
           data={englishInfo ?  Object.entries(englishInfo).sort() : []}
           horizontal
+          showsHorizontalScrollIndicator={false}
           renderItem={renderLessonCards}
           keyExtractor={(item, index) => index.toString()} // Use index as key for now
           contentContainerStyle={styles.flatListContainer}

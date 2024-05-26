@@ -46,6 +46,7 @@ import ShareMe from './components/Share';
 import Shape from './screens/English/AlphabetModule/Shape';
 import Animals from './screens/English/AlphabetModule/Animals';
 import ShapeHome from './screens/English/AlphabetModule/ShapeHome';
+import Working from './screens/Workbook/WorkbookScreen';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -61,7 +62,7 @@ const App = () => {
       <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Checker"
+          initialRouteName="Working"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen
@@ -73,6 +74,11 @@ const App = () => {
             name="Test"
             component={Test}
             options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="Working"
+            component={Working}
+            options={{ orientation: 'landscape' }}
           />
           <Stack.Screen
             name="ShareMe"

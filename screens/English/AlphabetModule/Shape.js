@@ -100,9 +100,11 @@ const Shape = ({navigation, route}) => {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      <ImageBackground
+        style={[styles.background,{justifyContent:'center',alignContent:'center'}]}
+        source={require('../../../assets/bg.jpg')}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </ImageBackground>
     );
   }
 

@@ -4,7 +4,7 @@
                                                 ============================
 */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import MainMenu from './screens/Home/MainMenu';
@@ -47,6 +47,9 @@ import Shape from './screens/English/AlphabetModule/Shape';
 import Animals from './screens/English/AlphabetModule/Animals';
 import ShapeHome from './screens/English/AlphabetModule/ShapeHome';
 import Working from './screens/Workbook/WorkbookScreen';
+import AnimalDetails from './screens/English/AlphabetModule/AnimalDetails';
+import { setupPlayer } from './setupPlayer';
+import TrackPlayer from 'react-native-track-player';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -56,13 +59,19 @@ type RootStackParamList = {
 };
 const App = () => {
   const [progress, setProgress] = React.useState(0);
+  useEffect(() => {
+    setupPlayer();
 
+    return () => {
+      TrackPlayer.reset();
+    };
+  }, []);
   return (
     <AuthProvider>
       <NavigationContainer ref={(navigator: any) => setNavigator(navigator)}>
         <StatusBar hidden={true} />
         <Stack.Navigator
-          initialRouteName="Working"
+          initialRouteName="Checker"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen
@@ -74,6 +83,11 @@ const App = () => {
             name="Test"
             component={Test}
             options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="AnimalDetails"
+            component={AnimalDetails}
+            options={{ orientation: 'landscape' }}
           />
           <Stack.Screen
             name="Working"

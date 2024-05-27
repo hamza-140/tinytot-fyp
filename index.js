@@ -7,5 +7,7 @@ import App from './App';
 import {name as appName} from './app.json';
 import TrackPlayer from 'react-native-track-player';
 import { playbackService } from './setupPlayer';
+import database from '@react-native-firebase/database';
+database().setPersistenceEnabled(true)
 AppRegistry.registerComponent(appName, () => App);
 TrackPlayer.registerPlaybackService(() => playbackService);

@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {View, TouchableOpacity,ImageBackground, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  ImageBackground,
+  StyleSheet,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -71,17 +76,39 @@ const AlphabetLesson = ({route, navigation}) => {
           />
         );
       case 2:
-        return <VideoLesson letter={item} setProgress={setProgress}
-        progress={progress} />; // Add VideoLesson component
+        return (
+          <VideoLesson
+            letter={item}
+            setProgress={setProgress}
+            progress={progress}
+          />
+        ); // Add VideoLesson component
       case 3:
-        return <LetterTracing setProgress={setProgress}
-        progress={progress} />; // Add VideoLesson component
+        return (
+          <LetterTracing
+            letter={item}
+            setProgress={setProgress}
+            progress={progress}
+          />
+        ); // Add VideoLesson component
       case 4:
-        return       <AlphabetMatching letter={item.toUpperCase()} progress={progress} setProgress={setProgress} />;
+        return (
+          <AlphabetMatching
+            letter={item.toUpperCase()}
+            progress={progress}
+            setProgress={setProgress}
+          />
+        );
       // case 3:
       //   return <AlphabetQuiz letter={item} />;
       case 5:
-        return <AlphabetQuiz progress={progress} letter={item} setProgress={setProgress} />;
+        return (
+          <AlphabetQuiz
+            progress={progress}
+            letter={item}
+            setProgress={setProgress}
+          />
+        );
       default:
         return null;
     }
@@ -100,16 +127,24 @@ const AlphabetLesson = ({route, navigation}) => {
   };
 
   return (
-    <ImageBackground source={require('../../../assets/bg.jpg')} style={{flex: 1}}>
+    <ImageBackground
+      source={require('../../../assets/bg.jpg')}
+      style={{flex: 1}}>
       <View style={styles.navigationButtons}>
-        <TouchableOpacity style={styles.backButton}  onPress={handlePrevious} disabled={page === 1}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={handlePrevious}
+          disabled={page === 1}>
           <Icon
             name="arrow-left"
             size={30}
             color={page === 1 ? 'gray' : 'black'}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.nextButton} onPress={handleNext} disabled={page === 5}>
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={handleNext}
+          disabled={page === 5}>
           <Icon
             name="arrow-right"
             size={30}
@@ -119,7 +154,6 @@ const AlphabetLesson = ({route, navigation}) => {
       </View>
       <CuteProgressBar value={progress} />
       {renderComponent()}
-      
     </ImageBackground>
   );
 };

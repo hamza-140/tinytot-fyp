@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
+import firestore from '@react-native-firebase/firestore';
 import {
   View,
   StyleSheet,
@@ -31,28 +32,65 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface LetterTracingProps {
+  letter: string;
   progress: number;
   setProgress: (progress: number) => void;
 }
-const {width, height} = Dimensions.get('window');
-const letterPathString = 'm380 340 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z';
 
-const scalePath = (pathString: string, scale: number): string => {
-  return pathString.replace(/([0-9.]+)/g, (match) => (parseFloat(match) * scale).toString());
-};
+const { width, height } = Dimensions.get('window');
 
-const scaledLetterPathString = scalePath(letterPathString, 0.8); // Scale down to 80%
-
-const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) => {
-  
+const LetterTracing: React.FC<LetterTracingProps> = ({ letter, progress, setProgress }) => {
+  const [letterPathString, setLetterPathString] = useState("");
   const [isCompleted, setIsCompleted] = useState(0);
-  // const letterPath = Skia.Path.MakeFromSVGString(
-  //   'm270 310 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z',
-  // )!;
-  // const originalPath = 'm270 310 64.5 -302.52 35.9 0 64.5 302.52 -31.3 0 -19.15 -98.76 -64 0 -19.15 98.76 -31.3 0zm108.65 -128.94 -26.2 -142.98 -26.35 142.98 52.55 0z';
-  const letterPath = Skia.Path.MakeFromSVGString(scaledLetterPathString)!;
+  const [loading, setLoading] = useState(true);
+  const [svgError, setSvgError] = useState(false);
+
+  useEffect(() => {
+    const fetchSVG = async () => {
+      try {
+        const doc = await firestore().collection('alphabetVideos').doc(letter).get();
+        if (doc.exists) {
+          const svg = doc.data()?.svg || "";
+          if (svg) {
+            setLetterPathString(svg);
+          } else {
+            console.error('No valid SVG found in the doc');
+            setSvgError(true);
+          }
+        } else {
+          console.error('No valid SVG found in the doc for this letter');
+          setSvgError(true);
+        }
+      } catch (error) {
+        console.error('Error fetching SVG:', error);
+        setSvgError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSVG();
+  }, [letter]);
+
+  const scalePath = (pathString: string, scale: number): string => {
+    return pathString.replace(/([0-9.]+)/g, (match) => (parseFloat(match) * scale).toString());
+  };
+
+  let scaledLetterPathString = "";
+  let letterPath = null;
   
-  // const letterPath = Skia.Path.MakeFromSVGString(scaledPath)!;
+  if (letterPathString && !svgError) {
+    try {
+      scaledLetterPathString = scalePath(letterPathString, 0.8); // Scale down to 80%
+      letterPath = Skia.Path.MakeFromSVGString(scaledLetterPathString);
+      if (!letterPath) throw new Error('Invalid SVG Path');
+    } catch (error) {
+      console.error('Error parsing SVG Path:', error);
+      letterPath = null;
+      setSvgError(true);
+    }
+  }
+
   const drawPath = useSharedValue(Skia.Path.Make());
 
   const gesture = Gesture.Pan()
@@ -60,73 +98,79 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ progress, setProgress }) 
       drawPath.value.moveTo(event.x, event.y);
       drawPath.modify();
       runOnJS(setIsCompleted)(drawPath.value.countPoints());
-
     })
     .onChange(event => {
       drawPath.value.lineTo(event.x, event.y);
       drawPath.modify();
       runOnJS(setIsCompleted)(drawPath.value.countPoints());
-
     })
     .onEnd(event => {
       runOnJS(setIsCompleted)(drawPath.value.countPoints());
     });
 
-  // useEffect(() => {
-  //   console.log(width)
-
-  // }, [isCompleted]);
+  useEffect(() => {
+    console.log(width);
+  }, [width]);
 
   const resetDrawing = () => {
     drawPath.value = Skia.Path.Make();
     setIsCompleted(0);
   };
+
   const checkDrawing = () => {
     if (isCompleted > 185) {
       Alert.alert('YEAH!');
       Tts.speak("Well done!");
-      if(progress===40){
-        setProgress(60)
+      if (progress === 40) {
+        setProgress(60);
+      } else {
+        setProgress(progress);
       }
-      else{
-        setProgress(progress)
-      }
-
-    }
-    else{
-      Alert.alert("NAH!")
+    } else {
+      Alert.alert("NAH!");
       Tts.speak("Try Again!");
     }
   };
 
+  if (loading) {
+    return <View style={styles.centered}><Text>Loading...</Text></View>;
+  }
+
+  if (svgError) {
+    return <View style={styles.centered}><Text>Invalid SVG Path. Please try another letter.</Text></View>;
+  }
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>
-        <ScrollView style={{flex: 1, flexDirection: 'row'}}>
-          <Canvas style={{flex: 1, width, height}}>
-            <Fill color="#75DA" />
-            {/* Letter black border */}
-            <Path path={letterPath} color="black" strokeWidth={10}>
-              <Morphology radius={6} />
-            </Path>
+        <ScrollView style={{ flex: 1, flexDirection: 'row' }}>
+          <Canvas style={{ flex: 1, width: 800, height: Number(height) }}>
+            {letterPath && (
+              <>
+                {/* Letter black border */}
+                <Path path={letterPath} color="black" strokeWidth={10}>
+                  <Morphology radius={6} />
+                </Path>
 
-            {/* Letter white background */}
-            <Path path={letterPath} color="white" strokeWidth={10}>
-              <Morphology radius={3} />
-            </Path>
+                {/* Letter white background */}
+                <Path path={letterPath} color="white" strokeWidth={10}>
+                  <Morphology radius={3} />
+                </Path>
 
-            {/* Masked letter background by the user drawn path */}
-            <Mask
-              mask={
-                <Path
-                  path={drawPath}
-                  color="black"
-                  strokeWidth={100}
-                  style="stroke"
-                />
-              }>
-              <Path path={letterPath} color="#FA00FF" strokeWidth={10} />
-            </Mask>
+                {/* Masked letter background by the user drawn path */}
+                <Mask
+                  mask={
+                    <Path
+                      path={drawPath}
+                      color="black"
+                      strokeWidth={20}
+                      style="stroke"
+                    />
+                  }>
+                  <Path path={letterPath} color="#FA00FF" strokeWidth={10} />
+                </Mask>
+              </>
+            )}
           </Canvas>
         </ScrollView>
       </GestureDetector>
@@ -158,6 +202,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     padding: 10,
     elevation: 5,
+  },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

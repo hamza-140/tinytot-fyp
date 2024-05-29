@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import Card from './Card'; // Import your Card component here
+import Card from '../Card'; // Import your Card component here
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -61,7 +61,7 @@ const MathLesson = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/bg.jpg')}
+      source={require('../../../assets/bg.jpg')}
       style={styles.background}>
       <View style={styles.container}>
         <FlatList
@@ -72,7 +72,7 @@ const MathLesson = ({navigation}) => {
           contentContainerStyle={styles.flatListContainer}
         />
         <Image
-          source={require('../../assets/panda.png')}
+          source={require('../../../assets/panda.png')}
           style={styles.overlayImage}
         />
         <TouchableOpacity
@@ -81,7 +81,7 @@ const MathLesson = ({navigation}) => {
             navigation.navigate('Main');
           }}>
           <Image
-            source={require('../../assets/back.png')}
+            source={require('../../../assets/back.png')}
             style={styles.settingimg}
           />
         </TouchableOpacity>

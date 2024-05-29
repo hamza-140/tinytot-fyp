@@ -36,7 +36,7 @@ import EnglishQuiz from './screens/English/EnglishQuiz';
 import AlphabetGame from './screens/English/Alphabets/AlphabetGame';
 import IslamicHome from './screens/Islamic/IslamicHome';
 import EnglishLesson from './screens/English/Alphabets/EnglishLesson';
-import MathLesson from './screens/Math/MathLesson';
+import MathLesson from './screens/Math/MathModule/MathLesson';
 import AlphabetLesson from './screens/English/AlphabetModule/AlphabetLesson';
 import Workbook from './screens/Workbook/Workbook';
 import ParentComponent from './screens/Workbook/ParentComponent';
@@ -54,10 +54,11 @@ import TrackPlayer from 'react-native-track-player';
 
 const Stack = createNativeStackNavigator();
 type RootStackParamList = {
-  Trace: { progress: number; setProgress: (progress: number) => void };
+  Trace: { letter:string, progress: number; setProgress: (progress: number) => void };
   // other screens
 };
 const App = () => {
+  let letter :string;
   const [progress, setProgress] = React.useState(0);
   useEffect(() => {
     setupPlayer();
@@ -214,7 +215,7 @@ const App = () => {
         name="Trace"
         options={{ orientation: 'landscape' }}
       >
-        {props => <LetterTracing {...props} progress={progress} setProgress={setProgress} />}
+        {props => <LetterTracing {...props} letter={letter} progress={progress} setProgress={setProgress} />}
       </Stack.Screen>
           <Stack.Screen
             name="Profile"

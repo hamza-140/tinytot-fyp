@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
-import { useIsFocused } from '@react-navigation/native';
-
+import {useIsFocused} from '@react-navigation/native';
 
 import {
   StyleSheet,
@@ -22,7 +21,7 @@ import Menu from './Menu'; // Adjust the import based on your file structure
 import CardComponent from '../../components/CardComponent';
 import auth from '@react-native-firebase/auth';
 const MainMenu = ({navigation, route}) => {
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
   const {signout} = useContext(Context);
   const [kidName, setKidName] = useState('');
   const [sound, setSound] = useState(null);
@@ -32,27 +31,27 @@ const MainMenu = ({navigation, route}) => {
 
   const start = id => {
     if (id == 1) {
-//      sound.stop();
+      //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('English');
     } else if (id == 2) {
-////      sound.stop();
+      ////      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
-      navigation.navigate('MathLesson');
+      navigation.navigate('Math');
     } else if (id == 3) {
-//      sound.stop();
+      //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Islamic');
     } else if (id == 4) {
-//      sound.stop();
+      //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Workbook');
     } else if (id == 5) {
-//      sound.stop();
+      //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Workbook');
     } else {
-//      sound.stop();
+      //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('Profile');
     }
@@ -150,7 +149,7 @@ const MainMenu = ({navigation, route}) => {
   const handleToggleSoundButtonPress = () => {
     if (sound) {
       if (sound.isPlaying()) {
-  //      sound.stop();
+        //      sound.stop();
         setSimg(require('../../assets/soundOff.png'));
       } else {
         // If sound is not playing, start it
@@ -202,7 +201,6 @@ const MainMenu = ({navigation, route}) => {
             data={data}
             horizontal
             showsHorizontalScrollIndicator={false}
-
             renderItem={renderCard}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.flatListContainer}
@@ -216,27 +214,29 @@ const MainMenu = ({navigation, route}) => {
             // onPress={() => {
             //   setSetting(true);
             // }}>
-            onPress={()=>{
-              toggleMenu()
-            }}
-            >
-            <Image
-              source={imageSrc}
-              style={styles.settingimg}
-            />
+            onPress={() => {
+              toggleMenu();
+            }}>
+            <Image source={imageSrc} style={styles.settingimg} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.sound}
             onPress={handleToggleSoundButtonPress}>
             {/* <Image source={simg} style={styles.soundimg} /> */}
             <View style={styles.logoContainer}>
-        <Text style={styles.star}>🐼</Text>
-        <View style={styles.appNameContainer}>
-          <Text style={styles.appName}>
-            <Text style={{color:'white',fontFamily:'PFSquareSansPro-Bold-subset' }}>TINYTOT</Text>
-          </Text>
-        </View>
-      </View>
+              <Text style={styles.star}>🐼</Text>
+              <View style={styles.appNameContainer}>
+                <Text style={styles.appName}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontFamily: 'PFSquareSansPro-Bold-subset',
+                    }}>
+                    TINYTOT
+                  </Text>
+                </Text>
+              </View>
+            </View>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#FFD700',
     marginRight: 8,
-    paddingBottom:4
+    paddingBottom: 4,
   },
   appName: {
     fontSize: 24,

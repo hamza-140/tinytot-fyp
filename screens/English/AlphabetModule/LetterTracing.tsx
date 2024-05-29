@@ -40,6 +40,7 @@ interface LetterTracingProps {
 const { width, height } = Dimensions.get('window');
 
 const LetterTracing: React.FC<LetterTracingProps> = ({ letter, progress, setProgress }) => {
+  const [scale,setScale] = useState(2.8)
   const [letterPathString, setLetterPathString] = useState("");
   const [isCompleted, setIsCompleted] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -48,10 +49,14 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ letter, progress, setProg
   useEffect(() => {
     const fetchSVG = async () => {
       try {
+        if(letter=="a"){
+          setScale(0.5)
+        }
         const doc = await firestore().collection('alphabetVideos').doc(letter).get();
         if (doc.exists) {
           const svg = doc.data()?.svg || "";
           if (svg) {
+            console.log(svg)
             setLetterPathString(svg);
           } else {
             console.error('No valid SVG found in the doc');
@@ -81,7 +86,7 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ letter, progress, setProg
   
   if (letterPathString && !svgError) {
     try {
-      scaledLetterPathString = scalePath(letterPathString, 0.8); // Scale down to 80%
+      scaledLetterPathString = scalePath(letterPathString, scale); // Scale down to 80%
       letterPath = Skia.Path.MakeFromSVGString(scaledLetterPathString);
       if (!letterPath) throw new Error('Invalid SVG Path');
     } catch (error) {
@@ -143,7 +148,7 @@ const LetterTracing: React.FC<LetterTracingProps> = ({ letter, progress, setProg
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <GestureDetector gesture={gesture}>
-        <ScrollView style={{ flex: 1, flexDirection: 'row' }}>
+        <ScrollView style={{ flex: 1,marginLeft:230,marginTop:30, flexDirection: 'row' }}>
           <Canvas style={{ flex: 1, width: 800, height: Number(height) }}>
             {letterPath && (
               <>

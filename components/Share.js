@@ -1,62 +1,80 @@
-// Card.js
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+// App.js
 
-const Card = ({  }) => {
-  const imageSource = "A"
-  const locked = true;
-  const stars = 2;
+import React from 'react';
+import {StyleSheet, View, Text, Dimensions} from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+
+const App = () => {
   return (
-    <View style={[styles.card, locked && styles.lockedCard]}>
-      <Text style={{fontSize:100}}>{imageSource}</Text>
-      {locked && (
-        <View style={styles.lockOverlay}>
-          <Icon name="lock" size={40} color="#ffffff" />
+    <View style={styles.container}>
+      <Text style={styles.score}>SCORE 250</Text>
+      <Text style={styles.level}>LEVEL 07</Text>
+
+      <View style={styles.gameContainer}>
+        <View style={styles.lettersColumn}>
+          <Text style={styles.letter}>A</Text>
+          <Text style={styles.letter}>B</Text>
+          <Text style={styles.letter}>C</Text>
+          <Text style={styles.letter}>D</Text>
         </View>
-      )}
-      
+
+        <View style={styles.spacer} />
+
+        <View style={styles.lettersColumn}>
+          <Text style={styles.letterRight}>b</Text>
+          <Text style={styles.letterRight}>c</Text>
+          <Text style={styles.letterRight}>a</Text>
+          <Text style={styles.letterRight}>d</Text>
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    width: 200,
-    height: 150,
-    margin: 10,
-    borderRadius: 10,
-    overflow: 'hidden',
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ffd700',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
+    paddingTop: 20,
   },
-  lockedCard: {
-    backgroundColor: '#a52a2a',
+  score: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#F90',
+    marginBottom: 5,
   },
-  image: {
-    width: '100%',
-    height: '70%',
-    resizeMode: 'contain',
+  level: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#F90',
+    marginBottom: 20,
   },
-  starContainer: {
+  gameContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-  },
-  lockOverlay: {
-    position: 'absolute',
-    width: '100%',
-    height: '70%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    width: '80%',
+  },
+  lettersColumn: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  letter: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#FFA500',
+    marginVertical: 10,
+  },
+  letterRight: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#00F',
+    marginVertical: 10,
+  },
+  spacer: {
+    width: windowWidth * 0.2, // Adjust width as needed
   },
 });
 
-export default Card;
+export default App;

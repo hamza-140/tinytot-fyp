@@ -28,9 +28,9 @@ const MathHome = ({navigation}) => {
     }
   };
   const data = [
-    {id: '1', title: 'Lessons', bg: '#FF6F61', img: 1},
-    {id: '2', title: 'Phonics', bg: '#800080', img: 2},
-    {id: '3', title: 'Shapes', bg: '#1E90FF', img: 3},
+    {id: '1', title: 'Lessons', bg: '#FF6F61', img: 5},
+    {id: '2', title: 'Addition', bg: '#800080', img: 2},
+    {id: '3', title: 'Subtraction', bg: '#1E90FF', img: 3},
     {id: '4', title: 'Animals', bg: '#FFA500', img: 4},
   ];
   const renderCard = ({item}) => (

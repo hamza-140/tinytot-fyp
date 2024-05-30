@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import Card from '../Card'; // Import your Card component here
+import Card from '../Card';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
@@ -55,7 +55,6 @@ const MathLesson = ({navigation}) => {
       letter={item[0]} // Assuming item is an array of key-value pairs
       status={item[1]}
       onPress={() => handleCardPress(item[0])} // Define handleCardPress if needed
-      // Add other props as needed
     />
   );
 

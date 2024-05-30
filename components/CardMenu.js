@@ -1,43 +1,48 @@
 // Card.js
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 
-const CardMenu = ({letter, onPress, img, status,imageURI, bg}) => {
-  const [imgSrc,setImgSrc] = useState(require('../assets/images/menu/animals.png'))
-  useEffect(()=>{
-    switch(Number(img)){
+const CardMenu = ({letter, onPress, img, status, imageURI, bg}) => {
+  const [imgSrc, setImgSrc] = useState(
+    require('../assets/images/menu/animals.png'),
+  );
+  useEffect(() => {
+    switch (Number(img)) {
       case 1:
-        setImgSrc(require("../assets/images/menu/lesson.png"))
+        setImgSrc(require('../assets/images/menu/lesson.png'));
         break;
       case 2:
-        setImgSrc(require("../assets/images/menu/phonics.png"))
+        setImgSrc(require('../assets/images/menu/phonics.png'));
         break;
       case 3:
-        setImgSrc(require("../assets/images/menu/shape.png"))
+        setImgSrc(require('../assets/images/menu/shape.png'));
         break;
       case 4:
-        setImgSrc(require("../assets/images/menu/animals.png"))
-      break;
+        setImgSrc(require('../assets/images/menu/animals.png'));
+        break;
+      case 5:
+        setImgSrc(require('../assets/images/menu/mathlesson.png'));
+        break;
       default:
-        setImgSrc(imgSrc)
-        break
+        setImgSrc(imgSrc);
+        break;
     }
-  },[])
- 
-  
+  }, []);
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.card,{backgroundColor:bg}]}>
-    <View style={styles.cardContent}>
-            <Text style={styles.cardTitle}>{letter}</Text>
-            <View style={styles.imageContainer}>
-            <Image
-          source={imageURI ? {uri: imageURI} : imgSrc}
-          style={styles.cardImage}
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.card, {backgroundColor: bg}]}>
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{letter}</Text>
+        <View style={styles.imageContainer}>
+          <Image
+            source={imageURI ? {uri: imageURI} : imgSrc}
+            style={styles.cardImage}
           />
-            </View>
-          </View>
-      </TouchableOpacity>
+        </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -59,7 +64,7 @@ const styles = {
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 5,
-    marginRight:40,
+    marginRight: 40,
     padding: 20,
   },
   cardContent: {
@@ -68,10 +73,10 @@ const styles = {
   },
   cardTitle: {
     fontSize: 35,
-    
+
     color: '#fff',
     marginRight: 10,
-    fontFamily:'PFSquareSansPro-Bold-subset',
+    fontFamily: 'PFSquareSansPro-Bold-subset',
     flexWrap: 'wrap', // Allow text to wrap to the next line
     maxWidth: '80%', // Set a maximum width for the text to allow wrapping
   },

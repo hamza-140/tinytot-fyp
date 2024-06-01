@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,7 +12,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import LessonCard from './LessonCard';
 
-const EnglishLesson = ({ navigation }) => {
+const EnglishLesson = ({navigation}) => {
   const [englishInfo, setEnglishInfo] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,9 @@ const EnglishLesson = ({ navigation }) => {
       try {
         const currentUser = auth().currentUser;
         if (currentUser) {
-          const parentRef = firestore().collection('parents').doc(currentUser.uid);
+          const parentRef = firestore()
+            .collection('parents')
+            .doc(currentUser.uid);
           const parentDoc = await parentRef.get();
           if (parentDoc.exists) {
             const parentData = parentDoc.data();
@@ -46,20 +48,23 @@ const EnglishLesson = ({ navigation }) => {
     fetchEnglishInfo();
   }, [navigation]);
 
-  const handleCardPress = (item) => {
-    navigation.navigate('AlphabetLesson', { item: item });
+  const handleCardPress = item => {
+    navigation.navigate('AlphabetLesson', {item: item});
     console.log(item);
   };
 
   // Function to render lesson cards
-  const renderLessonCards = ({ item }) => (
+  const renderLessonCards = ({item}) => (
     // <Card
     //   letter={item[0]} // Assuming item is an array of key-value pairs
     //   status={item[1].status}
     //   onPress={() => handleCardPress(item[0])}
     //   // Add other props as needed
     // />
-    <LessonCard title={item[0]} status={item[1].status} onPress={()=>handleCardPress(item[0])}></LessonCard>
+    <LessonCard
+      title={item[0]}
+      status={item[1].status}
+      onPress={() => handleCardPress(item[0])}></LessonCard>
   );
 
   return (
@@ -68,7 +73,7 @@ const EnglishLesson = ({ navigation }) => {
       style={styles.background}>
       <View style={styles.container}>
         <FlatList
-          data={englishInfo ?  Object.entries(englishInfo).sort() : []}
+          data={englishInfo ? Object.entries(englishInfo).sort() : []}
           horizontal
           showsHorizontalScrollIndicator={false}
           renderItem={renderLessonCards}

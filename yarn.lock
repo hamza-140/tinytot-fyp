@@ -1695,6 +1695,13 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
+"@react-native-community/voice@^1.1.9":
+  version "1.1.9"
+  resolved "https://registry.npmjs.org/@react-native-community/voice/-/voice-1.1.9.tgz"
+  integrity sha512-6QC51lIxdtPyIWyJEG7qsZ0nyRQFV7wUREcnvlQD3+xyk3p5na9LELR+rkIGdxVbLb3WJ73rhgjrc/ywyUh10Q==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-firebase/app@^19.2.2", "@react-native-firebase/app@19.2.2":
   version "19.2.2"
   resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-19.2.2.tgz"
@@ -6214,7 +6221,7 @@ react-native-youtube-iframe@^2.3.0:
   dependencies:
     events "^3.2.0"
 
-react-native@*, react-native@>=0.46, react-native@>=0.60, react-native@>=0.60.0-rc.2, react-native@>=0.64, react-native@>=0.8.0, react-native@0.74.1:
+react-native@*, react-native@>=0.40.0, react-native@>=0.46, react-native@>=0.60, react-native@>=0.60.0-rc.2, react-native@>=0.64, react-native@>=0.8.0, react-native@0.74.1:
   version "0.74.1"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.74.1.tgz"
   integrity sha512-0H2XpmghwOtfPpM2LKqHIN7gxy+7G/r1hwJHKLV6uoyXGC/gCojRtoo5NqyKrWpFC8cqyT6wTYCLuG7CxEKilg==

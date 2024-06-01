@@ -1,31 +1,61 @@
-// App.js
+import React, {useState, useEffect} from 'react';
+import {View, Button, StyleSheet, Text} from 'react-native';
+import Voice from '@react-native-community/voice';
 
-import React from 'react';
-import {StyleSheet, View, Text, Dimensions} from 'react-native';
-const windowWidth = Dimensions.get('window').width;
+const VoiceTest = () => {
+  const [recognized, setRecognized] = useState('');
+  const [started, setStarted] = useState('');
+  const [results, setResults] = useState([]);
 
-const App = () => {
+  useEffect(() => {
+    // Set up the Voice listeners
+    Voice.onSpeechStart = onSpeechStartHandler;
+    Voice.onSpeechEnd = onSpeechEndHandler;
+    Voice.onSpeechResults = onSpeechResultsHandler;
+
+    // Clean up the Voice listeners on component unmount
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    };
+  }, []);
+
+  const onSpeechStartHandler = e => {
+    console.log('onSpeechStart: ', e);
+    setStarted('√');
+  };
+
+  const onSpeechEndHandler = e => {
+    console.log('onSpeechEnd: ', e);
+    setStarted('√');
+  };
+
+  const onSpeechResultsHandler = e => {
+    console.log('onSpeechResults: ', e);
+    setResults(e.value);
+  };
+
+  const onStartButtonPress = () => {
+    Voice.start('en-US')
+      .then(() => console.log('Started'))
+      .catch(err => console.error(err));
+  };
+
+  const onStopButtonPress = () => {
+    Voice.stop()
+      .then(() => console.log('Stopped'))
+      .catch(err => console.error(err));
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.score}>SCORE 250</Text>
-      <Text style={styles.level}>LEVEL 07</Text>
-
-      <View style={styles.gameContainer}>
-        <View style={styles.lettersColumn}>
-          <Text style={styles.letter}>A</Text>
-          <Text style={styles.letter}>B</Text>
-          <Text style={styles.letter}>C</Text>
-          <Text style={styles.letter}>D</Text>
-        </View>
-
-        <View style={styles.spacer} />
-
-        <View style={styles.lettersColumn}>
-          <Text style={styles.letterRight}>b</Text>
-          <Text style={styles.letterRight}>c</Text>
-          <Text style={styles.letterRight}>a</Text>
-          <Text style={styles.letterRight}>d</Text>
-        </View>
+      <Button title="Start Recording" onPress={onStartButtonPress} />
+      <Button title="Stop Recording" onPress={onStopButtonPress} />
+      <View>
+        {results.map((result, index) => (
+          <Text key={`result-${index}`} style={styles.transcriptText}>
+            {result}
+          </Text>
+        ))}
       </View>
     </View>
   );
@@ -34,47 +64,15 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 20,
+    padding: 16,
   },
-  score: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#F90',
-    marginBottom: 5,
-  },
-  level: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#F90',
-    marginBottom: 20,
-  },
-  gameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '80%',
-  },
-  lettersColumn: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  letter: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFA500',
-    marginVertical: 10,
-  },
-  letterRight: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#00F',
-    marginVertical: 10,
-  },
-  spacer: {
-    width: windowWidth * 0.2, // Adjust width as needed
+  transcriptText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical: 8,
   },
 });
 
-export default App;
+export default VoiceTest;

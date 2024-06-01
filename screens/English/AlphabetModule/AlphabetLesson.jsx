@@ -127,9 +127,7 @@ const AlphabetLesson = ({route, navigation}) => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../../assets/bg.jpg')}
-      style={{flex: 1}}>
+    <View style={{flex: 1, backgroundColor: '#90e0ef'}}>
       <View style={styles.navigationButtons}>
         <TouchableOpacity
           style={styles.backButton}
@@ -138,7 +136,7 @@ const AlphabetLesson = ({route, navigation}) => {
           <Icon
             name="arrow-left"
             size={30}
-            color={page === 1 ? 'gray' : 'black'}
+            color={page === 1 ? 'grey' : 'white'}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -148,13 +146,13 @@ const AlphabetLesson = ({route, navigation}) => {
           <Icon
             name="arrow-right"
             size={30}
-            color={page === 5 ? 'gray' : 'black'}
+            color={page === 5 ? 'gray' : 'white'}
           />
         </TouchableOpacity>
       </View>
       <CuteProgressBar value={progress} />
       {renderComponent()}
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -168,7 +166,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 30,
-    backgroundColor: 'white',
+    backgroundColor: '#ff9f1c',
     borderRadius: 50,
     padding: 10,
     elevation: 5,
@@ -177,7 +175,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 30,
-    backgroundColor: 'white',
+    backgroundColor: '#ff9f1c',
     borderRadius: 50,
     padding: 10,
     elevation: 5,

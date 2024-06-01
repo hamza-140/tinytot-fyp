@@ -23,6 +23,18 @@ const CardMenu = ({letter, onPress, img, status, imageURI, bg}) => {
       case 5:
         setImgSrc(require('../assets/images/menu/mathlesson.png'));
         break;
+      case 6:
+        setImgSrc(require('../assets/images/menu/add.png'));
+        break;
+      case 7:
+        setImgSrc(require('../assets/images/menu/sub.png'));
+        break;
+      case 8:
+        setImgSrc(require('../assets/images/menu/mul.png'));
+        break;
+      case 9:
+        setImgSrc(require('../assets/images/menu/div.png'));
+        break;
       default:
         setImgSrc(imgSrc);
         break;
@@ -38,7 +50,7 @@ const CardMenu = ({letter, onPress, img, status, imageURI, bg}) => {
         <View style={styles.imageContainer}>
           <Image
             source={imageURI ? {uri: imageURI} : imgSrc}
-            style={styles.cardImage}
+            style={[styles.cardImage, {objectFit: 'contain'}]}
           />
         </View>
       </View>
@@ -73,12 +85,12 @@ const styles = {
   },
   cardTitle: {
     fontSize: 35,
-
     color: '#fff',
     marginRight: 10,
     fontFamily: 'PFSquareSansPro-Bold-subset',
-    flexWrap: 'wrap', // Allow text to wrap to the next line
-    maxWidth: '80%', // Set a maximum width for the text to allow wrapping
+
+    // flexWrap: 'wrap', // Allow text to wrap to the next line
+    // maxWidth: '80%', // Set a maximum width for the text to allow wrapping
   },
   imageContainer: {
     flex: 1,

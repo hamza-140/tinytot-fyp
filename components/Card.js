@@ -9,7 +9,10 @@ const Card = ({letter, onPress, imageSource, status, heading1}) => {
   return (
     <TouchableOpacity disabled={status} onPress={onPress}>
       <View style={styles.card}>
-        <Text style={[styles.cardText, {fontSize}]}>{displayText}</Text>
+        <Text style={[styles.cardText, {fontSize}]}>
+          {displayText}
+          {displayText.toLowerCase()}
+        </Text>
         {imageSource && typeof imageSource === 'number' && (
           <Image source={imageSource} style={styles.cardImage} />
         )}
@@ -30,16 +33,16 @@ const styles = {
   card: {
     width: cardWidth,
     height: 250,
-    backgroundColor: '#7ED7C1',
+    backgroundColor: '#ffd60a',
     borderWidth: 4,
-    borderColor: '#DC8686',
+    borderColor: '#023e8a',
     padding: 20,
     borderRadius: 10,
     marginHorizontal: cardMarginHorizontal,
   },
   cardText: {
-    fontFamily: 'Bubble Love Demo',
-    color: 'red',
+    fontFamily: 'PFSquareSansPro-Bold-subset',
+    color: '#023e8a',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',

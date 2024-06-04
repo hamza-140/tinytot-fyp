@@ -4,20 +4,20 @@
                                                 ============================
 */
 
-import React, { useEffect } from 'react';
-import { StatusBar } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {StatusBar} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import MainMenu from './screens/Home/MainMenu';
 import Alphabets from './screens/English/Alphabets';
-import { Provider as AuthProvider } from './context/AuthContext';
+import {Provider as AuthProvider} from './context/AuthContext';
 import EnglishHome from './screens/English/EnglishHome';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import YouTubePlayer from './components/YoutubePlayer';
 import LetterTracing from './screens/English/AlphabetModule/LetterTracing';
 import Signup from './screens/Signup/Signup';
 import KidProfileScreen from './screens/Kid/KidProfileScreen';
 import Tracing from './screens/English/Tracing';
-import { setNavigator } from './ref/navigationRef';
+import {setNavigator} from './ref/navigationRef';
 import Login from './screens/Login/Login';
 import Checker from './screens/Checker';
 import Phonics from './screens/English/Phonics';
@@ -48,19 +48,24 @@ import Animals from './screens/English/AlphabetModule/Animals';
 import ShapeHome from './screens/English/AlphabetModule/ShapeHome';
 import Working from './screens/Workbook/WorkbookScreen';
 import AnimalDetails from './screens/English/AlphabetModule/AnimalDetails';
-import { setupPlayer } from './setupPlayer';
+import {setupPlayer} from './setupPlayer';
 import TrackPlayer from 'react-native-track-player';
 import NumberLesson from './screens/Math/NumberLesson';
-import  ForgetPage from './screens/Authentication/ForgetPage';
+import ForgetPage from './screens/Authentication/ForgetPage';
+import FlashMessage from 'react-native-flash-message';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
 type RootStackParamList = {
-  Trace: { letter:string, progress: number; setProgress: (progress: number) => void };
+  Trace: {
+    letter: string;
+    progress: number;
+    setProgress: (progress: number) => void;
+  };
   // other screens
 };
 const App = () => {
-  let letter :string;
+  let letter: string;
   const [progress, setProgress] = React.useState(0);
   useEffect(() => {
     setupPlayer();
@@ -75,78 +80,77 @@ const App = () => {
         <StatusBar hidden={true} />
         <Stack.Navigator
           initialRouteName="Checker"
-          screenOptions={{ headerShown: false }}
-        >
+          screenOptions={{headerShown: false}}>
           <Stack.Screen
             name="AlphabetGame"
             component={AlphabetGame}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="NumberLesson"
             component={NumberLesson}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Test"
             component={Test}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="AnimalDetails"
             component={AnimalDetails}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Working"
             component={Working}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="ShareMe"
             component={ShareMe}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="Forget"
             component={ForgetPage}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="ShapeHome"
             component={ShapeHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
-          
+
           <Stack.Screen
             name="Checker"
             component={Checker}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Tracing"
             component={Tracing}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="Signup"
             component={Signup}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="KidProfile"
             component={KidProfileScreen}
-            options={{ orientation: 'portrait' }}
+            options={{orientation: 'portrait'}}
           />
           <Stack.Screen
             name="AlphabetLesson"
             component={AlphabetLesson}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           {/* <Stack.Screen
             name="CardComponent"
@@ -156,125 +160,130 @@ const App = () => {
           <Stack.Screen
             name="Main"
             component={MainMenu}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="English"
             component={EnglishHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="EnglishQuiz"
             component={EnglishQuiz}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="EnglishLessons"
             component={EnglishLessons}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="MathLessons"
             component={MathLessons}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Math"
             component={MathHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Islamic"
             component={IslamicHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Workbook"
             component={WorkbookHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="EnglishLesson"
             component={EnglishLesson}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="MathLesson"
             component={MathLesson}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Vocabulary"
             component={Vocabulary}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Alphabets"
             component={Alphabets}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Numbers"
             component={Numbers}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Games"
             component={YouTubePlayer}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
-          <Stack.Screen
-        name="Trace"
-        options={{ orientation: 'landscape' }}
-      >
-        {props => <LetterTracing {...props} letter={letter} progress={progress} setProgress={setProgress} />}
-      </Stack.Screen>
+          <Stack.Screen name="Trace" options={{orientation: 'landscape'}}>
+            {props => (
+              <LetterTracing
+                {...props}
+                letter={letter}
+                progress={progress}
+                setProgress={setProgress}
+              />
+            )}
+          </Stack.Screen>
           <Stack.Screen
             name="Profile"
             component={Profile}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Phonics"
             component={Phonics}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Shape"
             component={Shape}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Animals"
             component={Animals}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="Parent"
             component={ParentComponent}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="PhonicsLessons"
             component={PhonicsLessons}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="PhonicsHome"
             component={PhonicsHome}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="PhonicsVideo"
             component={PhonicsVideo}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
           <Stack.Screen
             name="PhonicsVideoList"
             component={PhonicsVideoList}
-            options={{ orientation: 'landscape' }}
+            options={{orientation: 'landscape'}}
           />
         </Stack.Navigator>
+        <FlashMessage position="top" />
       </NavigationContainer>
     </AuthProvider>
   );

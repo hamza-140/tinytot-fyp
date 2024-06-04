@@ -17,6 +17,15 @@ const ForgetPage = () => {
   const [email, setEmail] = useState('');
 
   const handleResetPassword = async () => {
+    if (!email.trim()) {
+      showMessage({
+        message: 'Error',
+        description: 'Email cannot be empty.',
+        type: 'danger',
+      });
+      return;
+    }
+
     try {
       await auth().sendPasswordResetEmail(email);
       setEmail('');
@@ -60,7 +69,7 @@ const ForgetPage = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('ShareMe');
+            navigation.navigate('Login');
           }}>
           <Text style={styles.forgotPassword}>Return to Login</Text>
         </TouchableOpacity>

@@ -1,14 +1,36 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { Input } from 'react-native-elements';
+import React, {useContext, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+  Image,
+} from 'react-native';
+import {Input} from 'react-native-elements';
 import Button from '../../components/Button';
+import * as yup from 'yup';
+import FlashMessage, {showMessage} from 'react-native-flash-message';
 import * as Animatable from 'react-native-animatable';
-import { Context } from '../../context/AuthContext';
+import {Context} from '../../context/AuthContext';
 
-const Signup = ({ navigation }) => {
-  const { signup, state } = useContext(Context);
-  const errorMessage = state.errorMessage;
+const validationSchema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+});
 
+const Signup = ({navigation}) => {
+  const {signup, state} = useContext(Context);
+  let errorMessage = state.errorMessage;
+  const [err, setErr] = useState(errorMessage);
+  const [errors, setErrors] = React.useState({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,162 +41,197 @@ const Signup = ({ navigation }) => {
   const [passwordConfirmError, setPasswordConfirmError] = useState('');
   const [isRegistering, setIsRegistering] = useState(false); // State variable to track registration status
 
-  const isEmailValid = email => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const handleSubmit = async () => {
+    try {
+      // Validate the form values
+      await validationSchema.validate(
+        {name, email, password},
+        {abortEarly: false},
+      );
 
-  const handleSignup = async () => {
-    // Clear previous error messages
-    setNameError('');
-    setEmailError('');
-    setPasswordError('');
-    setPasswordConfirmError('');
-
-    // Validation checks
-    let hasError = false;
-    if (name.trim() === '') {
-      setNameError('Name is required');
-      hasError = true;
-    }
-    if (!isEmailValid(email)) {
-      setEmailError('Invalid email format');
-      hasError = true;
-    }
-    if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters long');
-      hasError = true;
-    }
-    if (password !== passwordConfirm) {
-      setPasswordConfirmError('Passwords do not match');
-      hasError = true;
-    }
-
-    if (!hasError) {
-      // Set the registering state to true
-      setIsRegistering(true);
-      
       try {
         // Call signup function
-        await signup({ name, email, password });
+        await signup({name, email, password});
+        setIsRegistering(true);
+        setErr(state.errorMessage);
       } catch (error) {
         // If registration fails, set the registering state back to false
         setIsRegistering(false);
       }
+      setEmail('');
+      setPassword('');
+      errorMessage('');
+    } catch (err) {
+      const errors = {};
+      err.inner.forEach(e => {
+        errors[e.path] = e.message;
+      });
+      setErrors(errors);
+      showMessage({
+        message: 'Please fix the errors below',
+        type: 'danger',
+      });
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <Animatable.Text animation="slideInDown" style={styles.title}>
-          Parent Registration
-        </Animatable.Text>
-        <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
-          <Input
-            value={name}
-            placeholder="Name"
-            placeholderTextColor={'#fff'}
-            onChangeText={text => setName(text)}
-            style={{ color: '#fff' }}
-          />
-          {nameError ? <Text style={styles.error}>{nameError}</Text> : null}
-
-          <Input
-            value={email}
-            inputMode="email"
-            placeholder="Email"
-            placeholderTextColor={'#fff'}
-            onChangeText={text => setEmail(text)}
-            style={{ color: '#fff' }}
-          />
-          {emailError ? <Text style={styles.error}>{emailError}</Text> : null}
-
-          <Input
-            value={password}
-            placeholder="Password"
-            placeholderTextColor={'#fff'}
-            secureTextEntry
-            onChangeText={text => setPassword(text)}
-            style={{ color: '#fff' }}
-          />
-          {passwordError ? <Text style={styles.error}>{passwordError}</Text> : null}
-
-          <Input
-            value={passwordConfirm}
-            placeholder="Confirm Password"
-            placeholderTextColor={'#fff'}
-            secureTextEntry
-            onChangeText={text => setPasswordConfirm(text)}
-            style={{ color: '#fff' }}
-          />
-          {passwordConfirmError ? <Text style={styles.error}>{passwordConfirmError}</Text> : null}
-        </Animatable.View>
-        {errorMessage ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-
-        <Animatable.View animation="fadeInUp" delay={500}>
-          <Button
-            title={isRegistering ? 'Registering' : 'Register'} // Button text changes based on isRegistering state
-            onPress={handleSignup}
-            isDisabled={!isEmailValid(email) || password.length < 6 || password !== passwordConfirm || name.trim() === ''}
-          />
-        </Animatable.View>
-
-        <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
-          <View style={{ flexDirection: 'row' }}>
-            <TouchableOpacity>
-              <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                Already have an account?
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{ marginLeft: 10 }}
-              onPress={() => {
-                navigation.navigate('Login');
-              }}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                  textDecorationLine: 'underline',
-                }}>
-                Login Here!
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </Animatable.View>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{alignItems: 'center', justifyContent: 'center'}}>
+      <View style={styles.header}>
+        <Image
+          source={require('../../assets/images/screen.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.companyName}>Welcome to Tinytot!</Text>
       </View>
+      <View style={styles.body}>
+        <Text style={styles.loginText}>Parent Register</Text>
+        <Text style={styles.signInText}>Register to continue</Text>
+        <Input
+          inputContainerStyle={{
+            borderBottomWidth: 0,
+          }}
+          placeholder="Name"
+          style={styles.input}
+          value={name}
+          onChangeText={e => {
+            setErrors('');
+            setErr('');
+            setName(e);
+          }}
+          errorMessage={errors.name}
+        />
+        <Input
+          inputContainerStyle={{
+            borderBottomWidth: 0,
+          }}
+          placeholder="Email"
+          inputMode="email"
+          style={styles.input}
+          value={email}
+          onChangeText={e => {
+            setErrors('');
+            setErr('');
+            setEmail(e);
+          }}
+          errorMessage={errors.email}
+        />
+        <Input
+          inputContainerStyle={{borderBottomWidth: 0}}
+          placeholder="Password"
+          secureTextEntry={true}
+          style={styles.input}
+          value={password}
+          onChangeText={e => {
+            setErrors('');
+            setPassword(e);
+            setErr('');
+          }}
+          errorMessage={errors.password}
+        />
+        {err ? <Text style={{color: 'red'}}>{err}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Register</Text>
+        </TouchableOpacity>
+        <View
+          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              setErrors('');
+              setErr('');
+              navigation.navigate('Login');
+            }}>
+            <Text style={styles.forgotPassword}>Login Here</Text>
+          </TouchableOpacity>
+          <Text style={{marginTop: 10, fontSize: 20}}> || </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setErrors('');
+              setErr('');
+              navigation.navigate('Forget');
+            }}>
+            <Text style={styles.forgotPassword}>Forgot Password</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <FlashMessage position="top" />
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    backgroundColor: '#D27777',
-    padding: 16,
-  },
   container: {
+    flex: 1,
+    backgroundColor: '#E6F2F2',
+  },
+  header: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#D27777',
-    padding: 16,
   },
-  title: {
-    color: '#fff',
-    fontSize: 36,
-    fontFamily: 'PFSquareSansPro-Bold-subset',
-    marginBottom: 16,
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    borderRadius: 50,
   },
-  inputContainer: {
+  companyName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#006666',
+  },
+  body: {
+    flex: 2,
+    width: '80%',
+    alignItems: 'center',
+  },
+  loginText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#006666',
+    marginBottom: 10,
+  },
+  signInText: {
+    fontSize: 16,
+    color: '#666666',
+    marginBottom: 20,
+  },
+  input: {
     width: '100%',
-    marginBottom: 16,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    fontSize: 18,
+    marginBottom: 20,
   },
-  error: {
-    color: 'red',
-    marginBottom: 8,
+  button: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#004d4d',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  forgotPassword: {
+    color: '#004d4d',
+    textDecorationLine: 'underline',
+    marginTop: 10,
   },
 });
 

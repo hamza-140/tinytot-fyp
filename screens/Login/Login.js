@@ -1,137 +1,131 @@
-/* 
-                                                ============================
-                                                | IMPORTS AND DEPENDENCIES |  
-                                                ============================
-*/
-
+import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
-import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import {Input} from 'react-native-elements';
-import * as Animatable from 'react-native-animatable';
+import * as yup from 'yup';
+import FlashMessage, {showMessage} from 'react-native-flash-message';
 import {Context} from '../../context/AuthContext';
-import Button from '../../components/Button';
 
-/* 
-                                                ==================
-                                                | LOGIN FUNCTION |  
-                                                ==================
-*/
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Please enter a valid email')
+    .required('Email is required'),
+  password: yup
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password is required'),
+});
 
-const Login = ({navigation}) => {
+const Login = () => {
+  const navigation = useNavigation();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errors, setErrors] = React.useState({});
   const {signin, state} = useContext(Context);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const errorMessage = state.errorMessage;
+  let errorMessage = state.errorMessage;
+  const [err, setErr] = useState(errorMessage);
 
-  /*
-                                                ======================
-                                                | CHECK EMAIL FORMAT |  
-                                                ======================
-*/
+  const handleSubmit = async () => {
+    try {
+      // Validate the form values
+      await validationSchema.validate({email, password}, {abortEarly: false});
 
-  const isEmailValid = email => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+      try {
+        signin({email, password});
+        setErr(state.errorMessage);
+      } catch (err) {
+        console.log(err);
+      }
+      setEmail('');
+      setPassword('');
+      errorMessage('');
+    } catch (err) {
+      const errors = {};
+      err.inner.forEach(e => {
+        errors[e.path] = e.message;
+      });
+      setErrors(errors);
+      showMessage({
+        message: 'Please fix the errors below',
+        type: 'danger',
+      });
+    }
   };
-
-  // const handleLogin = async () => {
-  // try {
-  // Perform your authentication logic (e.g., sign-in with email and password)
-  // const response = await auth().signInWithEmailAndPassword(email, password);
-  // await signin({email, password});
-  // await Keychain.setGenericPassword('name', name);
-  // Retrieve the user UID from the response
-  // const userUid = response.user.uid;
-  // const db = firebase.firestore();
-  // const doc = await db.collection('kidProfiles').doc(userUid).get();
-  // const kidName = doc.exists ? doc.data().kidName : null;
-
-  // Set the kid's name in Keychain for later use
-  // await Keychain.setGenericPassword('name', kidName);
-
-  // Now, you can navigate to another screen and pass the user UID and kid's name as parameters
-  // navigation.navigate('Main');
-
-  // Now, you can navigate to another screen and pass the user UID as a parameter
-  // navigation.navigate('KidProfile', {parentUid: userUid});
-  // console.log(userUid);
-  // } catch (error) {
-  //   console.error('Authentication error:', error);
-  // }
-  // console.log(email);
-  // console.log(password);
-  // setEmail('');
-  // setPassword('');
-  // };
 
   return (
     <View style={styles.container}>
-      <Animatable.Text animation="slideInDown" style={styles.title}>
-        Parent Login
-      </Animatable.Text>
-      <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
-        <Input
-          value={email}
-          inputMode="email"
-          placeholder="Email"
-          placeholderTextColor={'#fff'}
-          onChangeText={text => setEmail(text)}
-          style={{color: '#fff'}}
+      <View style={styles.header}>
+        <Image
+          source={require('../../assets/images/screen.png')}
+          style={styles.logo}
         />
+        <Text style={styles.companyName}>Welcome to Tinytot!</Text>
+      </View>
+      <View style={styles.body}>
+        <Text style={styles.loginText}>Parent Login</Text>
+        <Text style={styles.signInText}>Sign in to continue</Text>
         <Input
-          value={password}
-          placeholder="Password"
-          placeholderTextColor={'#fff'}
-          secureTextEntry
-          onChangeText={text => setPassword(text)}
-          style={{color: '#fff'}}
-        />
-      </Animatable.View>
-      {errorMessage ? <Text style={{color: 'red'}}>{errorMessage}</Text> : null}
-
-      <Animatable.View animation="fadeInUp" delay={500}>
-        {/* <Button
-          disabled={!isEmailValid(email) || password.length < 6}
-          title="Login"
-          buttonStyle={styles.button}
-          onPress={() => {
-            signin({email, password});
-            setEmail('');
-            setPassword('');
+          inputContainerStyle={{
+            borderBottomWidth: 0,
           }}
-        /> */}
-        <Button onPress={()=>{
-          signin({email, password});
-          setEmail('');
-          setPassword('');
-        }} title='Login'
-        isDisabled={!isEmailValid(email) || password.length < 6} // Pass the disabled prop here
-
-        ></Button>
-      </Animatable.View>
-      <Animatable.View animation="fadeInUp" style={styles.inputContainer}>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableOpacity>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>
-              No Account?{}
-            </Text>
-          </TouchableOpacity>
+          placeholder="Email"
+          inputMode="email"
+          style={styles.input}
+          value={email}
+          onChangeText={e => {
+            setErrors('');
+            setErr('');
+            setEmail(e);
+          }}
+          errorMessage={errors.email}
+        />
+        <Input
+          inputContainerStyle={{borderBottomWidth: 0}}
+          placeholder="Password"
+          secureTextEntry={true}
+          style={styles.input}
+          value={password}
+          onChangeText={e => {
+            setErrors('');
+            setPassword(e);
+            setErr('');
+          }}
+          errorMessage={errors.password}
+        />
+        {err ? <Text style={{color: 'red'}}>{err}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableOpacity>
+        <View
+          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <TouchableOpacity
-            style={{marginLeft: 10}}
             onPress={() => {
+              setErrors('');
+              setErr('');
               navigation.navigate('Signup');
             }}>
-            <Text
-              style={{
-                color: 'white',
-                fontWeight: 'bold',
-                textDecorationLine: 'underline',
-              }}>
-              Register Here!
-            </Text>
+            <Text style={styles.forgotPassword}>Register Here</Text>
+          </TouchableOpacity>
+          <Text style={{marginTop: 10, fontSize: 20}}> || </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setErrors('');
+              setErr('');
+              navigation.navigate('Forget');
+            }}>
+            <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
-      </Animatable.View>
+      </View>
+      <FlashMessage position="top" />
     </View>
   );
 };
@@ -139,25 +133,77 @@ const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E6F2F2',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  header: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#D27777',
-    padding: 16,
   },
-  title: {
-    fontFamily:'PFSquareSansPro-Bold-subset',
-    fontSize: 36,
-    marginBottom: 16,
-    color: '#fff',
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    borderRadius: 50,
   },
-  inputContainer: {
+  companyName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#006666',
+  },
+  body: {
+    flex: 2,
+    width: '80%',
+    alignItems: 'center',
+  },
+  loginText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#006666',
+    marginBottom: 10,
+  },
+  signInText: {
+    fontSize: 16,
+    color: '#666666',
+    marginBottom: 20,
+  },
+  input: {
     width: '100%',
-    marginBottom: 16,
+    height: 50,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    fontSize: 18,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#42b0f4',
-    borderRadius: 8,
-    marginBottom: 30,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#004d4d',
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  forgotPassword: {
+    color: '#004d4d',
+    textDecorationLine: 'underline',
+    marginTop: 10,
   },
 });
 

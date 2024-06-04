@@ -50,6 +50,8 @@ import Working from './screens/Workbook/WorkbookScreen';
 import AnimalDetails from './screens/English/AlphabetModule/AnimalDetails';
 import { setupPlayer } from './setupPlayer';
 import TrackPlayer from 'react-native-track-player';
+import NumberLesson from './screens/Math/NumberLesson';
+import  ForgetPage from './screens/Authentication/ForgetPage';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -81,6 +83,11 @@ const App = () => {
             options={{ orientation: 'landscape' }}
           />
           <Stack.Screen
+            name="NumberLesson"
+            component={NumberLesson}
+            options={{ orientation: 'landscape' }}
+          />
+          <Stack.Screen
             name="Test"
             component={Test}
             options={{ orientation: 'portrait' }}
@@ -98,7 +105,12 @@ const App = () => {
           <Stack.Screen
             name="ShareMe"
             component={ShareMe}
-            options={{ orientation: 'landscape' }}
+            options={{ orientation: 'portrait' }}
+          />
+          <Stack.Screen
+            name="Forget"
+            component={ForgetPage}
+            options={{ orientation: 'portrait' }}
           />
           <Stack.Screen
             name="ShapeHome"

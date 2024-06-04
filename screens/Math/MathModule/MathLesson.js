@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import LessonCard from '../../English/Alphabets/LessonCard';
 import Card from '../Card';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -47,15 +48,15 @@ const MathLesson = ({navigation}) => {
   }, []);
 
   const handleCardPress = item => {
+    navigation.navigate('NumberLesson', {item: item});
     console.log(item);
   };
   // Function to render lesson cards
   const renderLessonCards = ({item}) => (
-    <Card
-      letter={item[0]} // Assuming item is an array of key-value pairs
-      status={item[1]}
-      onPress={() => handleCardPress(item[0])} // Define handleCardPress if needed
-    />
+    <LessonCard
+      title={item[0]}
+      status={item[1].status}
+      onPress={() => handleCardPress(item[0])}></LessonCard>
   );
 
   return (

@@ -9,10 +9,7 @@ const Card = ({letter, onPress, imageSource, status, heading1}) => {
   return (
     <TouchableOpacity disabled={status} onPress={onPress}>
       <View style={styles.card}>
-        <Text style={[styles.cardText, {fontSize}]}>
-          {displayText}
-          {displayText.toLowerCase()}
-        </Text>
+        <Text style={[styles.cardText, {fontSize}]}>{displayText}</Text>
         {imageSource && typeof imageSource === 'number' && (
           <Image source={imageSource} style={styles.cardImage} />
         )}

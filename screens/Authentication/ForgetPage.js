@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,47 +8,27 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import {Input} from 'react-native-elements';
-import * as yup from 'yup';
+import auth from '@react-native-firebase/auth';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
+import * as yup from 'yup';
 
-const validationSchema = yup.object().shape({
-  email: yup
-    .string()
-    .email('Please enter a valid email')
-    .required('Email is required'),
-  password: yup
-    .string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
-});
-
-const App = () => {
+const ForgetPage = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [errors, setErrors] = React.useState({});
+  const [email, setEmail] = useState('');
 
-  const handleSubmit = async () => {
+  const handleResetPassword = async () => {
     try {
-      // Validate the form values
-      await validationSchema.validate({email, password}, {abortEarly: false});
-
-      // Handle successful form submission
+      await auth().sendPasswordResetEmail(email);
+      setEmail('');
       showMessage({
-        message: 'Login Successful',
+        message: 'Password Reset Email Sent',
+        description: 'Please check your email for further instructions.',
         type: 'success',
       });
-      console.log('Form submitted successfully!');
-    } catch (err) {
-      // Set validation errors
-      const errors = {};
-      err.inner.forEach(e => {
-        errors[e.path] = e.message;
-      });
-      setErrors(errors);
+    } catch (error) {
       showMessage({
-        message: 'Please fix the errors below',
+        message: 'Error',
+        description: error.message,
         type: 'danger',
       });
     }
@@ -58,40 +38,31 @@ const App = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require('../assets/images/screen.png')}
+          source={require('../../assets/images/screen.png')} // Replace with your logo URL
           style={styles.logo}
         />
         <Text style={styles.companyName}>Welcome to Tinytot!</Text>
       </View>
       <View style={styles.body}>
-        <Text style={styles.loginText}>Login</Text>
-        <Text style={styles.signInText}>Sign in to continue</Text>
-        <Input
-          inputContainerStyle={{borderBottomWidth: 0, marginBottom: 0}}
+        <Text style={styles.loginText}>Forget Password?</Text>
+        <Text style={styles.signInText}>
+          Click below to reset your password.
+        </Text>
+        <TextInput
           placeholder="Email"
           inputMode="email"
           style={styles.input}
+          onChangeText={text => setEmail(text)}
           value={email}
-          onChangeText={setEmail}
-          errorMessage={errors.email}
         />
-        <Input
-          inputContainerStyle={{borderBottomWidth: 0}}
-          placeholder="Password"
-          secureTextEntry={true}
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          errorMessage={errors.password}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Log In</Text>
+        <TouchableOpacity onPress={handleResetPassword} style={styles.button}>
+          <Text style={styles.buttonText}>Reset</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Forget');
+            navigation.navigate('ShareMe');
           }}>
-          <Text style={styles.forgotPassword}>Forgot Password</Text>
+          <Text style={styles.forgotPassword}>Return to Login</Text>
         </TouchableOpacity>
       </View>
       <FlashMessage position="top" />
@@ -102,7 +73,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6F2F2',
+    backgroundColor: '#E6F2F2', // Background color
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -176,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default ForgetPage;

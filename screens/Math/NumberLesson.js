@@ -14,6 +14,7 @@ import FirstComponent from '../English/AlphabetModule/FirstComponent';
 import VideoLesson from '../English/AlphabetModule/VideoLesson';
 import FirstMath from '../Math/MathModule/FirstMath';
 import SecondMath from './MathModule/SecondMath';
+import NumberTracing from './MathModule/NumberTracing';
 // import LetterTracing from './LetterTracing';
 // import AlphabetMatching from './AlphabetMatching';
 
@@ -86,8 +87,8 @@ const NumberLesson = ({route, navigation}) => {
         ); // Add VideoLesson component
       case 3:
         return (
-          <FirstComponent
-            item={item}
+          <NumberTracing
+            letter={item}
             setProgress={setProgress}
             progress={progress}
           />

@@ -128,11 +128,13 @@ const Menu = ({navigation}) => {
                 }}>
                 <Text style={styles.closeButtonText}>Music : ON/OFF</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.closeButton,{width:150}]} onPress={onShare}>
+              <TouchableOpacity
+                style={[styles.closeButton, {width: 150}]}
+                onPress={onShare}>
                 <Text style={styles.closeButtonText}>Share App</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.closeButton,{width:150}]}
+                style={[styles.closeButton, {width: 150}]}
                 onPress={closeModalSetting}>
                 <Text style={styles.closeButtonText}>Cancel</Text>
               </TouchableOpacity>

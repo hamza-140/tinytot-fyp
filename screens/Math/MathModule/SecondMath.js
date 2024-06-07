@@ -36,6 +36,7 @@ export default function SecondMath() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#90e0ef', // Background color for the entire screen

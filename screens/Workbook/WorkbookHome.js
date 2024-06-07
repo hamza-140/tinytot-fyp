@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ParentComponent from './ParentComponent';
+import MathComponent from './MathComponent';
 
 const WorkbookScreen = () => {
   const [lessonsCompleted, setLessonsCompleted] = useState({
@@ -29,7 +30,9 @@ const WorkbookScreen = () => {
       try {
         const currentUser = auth().currentUser;
         if (currentUser) {
-          const parentRef = firestore().collection('parents').doc(currentUser.uid);
+          const parentRef = firestore()
+            .collection('parents')
+            .doc(currentUser.uid);
           const parentDoc = await parentRef.get();
 
           if (parentDoc.exists) {
@@ -119,6 +122,8 @@ const WorkbookScreen = () => {
         <>
           {currentCategory === 'English' ? (
             <ParentComponent />
+          ) : currentCategory === 'Math' ? (
+            <MathComponent></MathComponent>
           ) : (
             <ScrollView contentContainerStyle={styles.lessonListContainer}>
               {categories[currentCategory].map(lesson => (
@@ -149,7 +154,7 @@ const WorkbookScreen = () => {
               <View
                 style={[
                   styles.progressFill,
-                  { width: `${calculateTotalProgress()}%` },
+                  {width: `${calculateTotalProgress()}%`},
                 ]}
               />
             </View>

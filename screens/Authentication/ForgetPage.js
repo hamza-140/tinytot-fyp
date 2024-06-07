@@ -82,7 +82,7 @@ const ForgetPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6F2F2', // Background color
+    backgroundColor: '#E6F2F2',
     alignItems: 'center',
     justifyContent: 'center',
   },

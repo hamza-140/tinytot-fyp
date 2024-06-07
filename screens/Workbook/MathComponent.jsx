@@ -5,11 +5,11 @@ import auth from '@react-native-firebase/auth';
 import Workbook from './Workbook'; // Assuming Workbook component is in a separate file
 import {useNavigation} from '@react-navigation/native';
 import CardComponent from '../../components/CardComponent';
-const ParentComponent = () => {
-  const [completedEnglishLessons, setCompletedEnglishLessons] = useState([]);
+const MathComponent = () => {
+  const [completedMathLessons, setCompletedMathLessons] = useState([]);
   const navigation = useNavigation();
   useEffect(() => {
-    const fetchCompletedEnglishLessons = async () => {
+    const fetchCompletedMathLessons = async () => {
       try {
         const currentUser = await auth().currentUser;
         if (currentUser) {
@@ -17,16 +17,16 @@ const ParentComponent = () => {
             .collection('parents')
             .doc(currentUser.uid);
           const parentDoc = await parentRef.get();
-          const english = parentDoc.data().english;
+          const math = parentDoc.data().math;
 
           // Filter out completed lessons
-          const completedLessons = Object.keys(english)
-            .filter(key => english[key].isCompleted)
+          const completedLessons = Object.keys(math)
+            .filter(key => math[key].isCompleted)
             .sort();
 
           console.log(completedLessons);
 
-          setCompletedEnglishLessons(completedLessons);
+          setCompletedMathLessons(completedLessons);
         } else {
           console.log('User not logged in');
         }
@@ -35,7 +35,7 @@ const ParentComponent = () => {
       }
     };
 
-    fetchCompletedEnglishLessons();
+    fetchCompletedMathLessons();
   }, []);
 
   return (
@@ -45,15 +45,15 @@ const ParentComponent = () => {
       }}>
       <CardComponent
         title={'Goto Workbook'}
-        color={'#2ECD70'}
-        bg={'#A5FECA'}
+        color={'#FE9D50'}
+        bg={'#FEDABC'}
         onPress={() => {
           navigation.navigate('Working');
         }}></CardComponent>
 
-      <Workbook completedLessons={completedEnglishLessons} />
+      <Workbook completedLessons={completedMathLessons} />
     </ScrollView>
   );
 };
 
-export default ParentComponent;
+export default MathComponent;

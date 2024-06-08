@@ -6,13 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  Button,
   ActivityIndicator,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ParentComponent from './ParentComponent';
 import MathComponent from './MathComponent';
+import {PieChart} from 'react-native-gifted-charts';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const WorkbookScreen = () => {
   const [lessonsCompleted, setLessonsCompleted] = useState({
@@ -37,26 +38,26 @@ const WorkbookScreen = () => {
 
           if (parentDoc.exists) {
             const english = parentDoc.data().english;
-
             if (english) {
               const completedLessons = Object.keys(english)
                 .filter(key => english[key].isCompleted)
                 .sort();
-
-              console.log('Completed English Lessons:', completedLessons);
-
               setLessonsCompleted(prevState => ({
                 ...prevState,
                 English: completedLessons,
               }));
-            } else {
-              console.log('No English lessons found');
             }
-          } else {
-            console.log('Parent document does not exist');
+            const math = parentDoc.data().math;
+            if (math) {
+              const completedLessons = Object.keys(math)
+                .filter(key => math[key].isCompleted)
+                .sort();
+              setLessonsCompleted(prevState => ({
+                ...prevState,
+                Math: completedLessons,
+              }));
+            }
           }
-        } else {
-          console.log('User not logged in');
         }
       } catch (error) {
         console.log('Error fetching English lessons:', error);
@@ -85,6 +86,7 @@ const WorkbookScreen = () => {
   };
 
   const calculateTotalProgress = () => {
+    console.log(currentCategory);
     return Math.floor(
       (lessonsCompleted[currentCategory].length /
         categories[currentCategory].length) *
@@ -101,7 +103,6 @@ const WorkbookScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Workbook</Text>
-
       <View style={styles.categorySelector}>
         {Object.keys(categories).map(category => (
           <TouchableOpacity
@@ -111,6 +112,17 @@ const WorkbookScreen = () => {
               currentCategory === category && styles.activeCategory,
             ]}
             onPress={() => setCurrentCategory(category)}>
+            <Icon
+              name={
+                category === 'English'
+                  ? 'book'
+                  : category === 'Math'
+                  ? 'functions'
+                  : 'school'
+              }
+              size={24}
+              color="#006666"
+            />
             <Text style={styles.categoryButtonText}>{category}</Text>
           </TouchableOpacity>
         ))}
@@ -121,9 +133,9 @@ const WorkbookScreen = () => {
       ) : (
         <>
           {currentCategory === 'English' ? (
-            <ParentComponent />
+            <ParentComponent widthBar={calculateTotalProgress()} />
           ) : currentCategory === 'Math' ? (
-            <MathComponent></MathComponent>
+            <MathComponent widthBar={calculateTotalProgress()} />
           ) : (
             <ScrollView contentContainerStyle={styles.lessonListContainer}>
               {categories[currentCategory].map(lesson => (
@@ -147,19 +159,6 @@ const WorkbookScreen = () => {
               ))}
             </ScrollView>
           )}
-
-          <View style={styles.progressContainer}>
-            <Text>Total Progress:</Text>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {width: `${calculateTotalProgress()}%`},
-                ]}
-              />
-            </View>
-            <Text>{calculateTotalProgress()}%</Text>
-          </View>
         </>
       )}
 
@@ -173,7 +172,11 @@ const WorkbookScreen = () => {
             <Text style={styles.modalText}>
               The lesson "{selectedLesson}" is already completed!
             </Text>
-            <Button title="OK" onPress={() => setModalVisible(false)} />
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>OK</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -184,38 +187,39 @@ const WorkbookScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#75DA',
+    backgroundColor: '#E6F2F2',
     paddingHorizontal: 20,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
+    color: '#006666',
     marginBottom: 20,
+    textAlign: 'center',
   },
   categorySelector: {
     flexDirection: 'row',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   categoryButton: {
     padding: 10,
-    backgroundColor: '#ddd',
-    marginHorizontal: 5,
-    borderRadius: 5,
+    marginHorizontal: 10,
+    alignItems: 'center',
   },
   activeCategory: {
-    backgroundColor: '#aaa',
+    borderBottomWidth: 2,
+    borderBottomColor: '#343a40',
   },
   categoryButtonText: {
     fontSize: 16,
+    color: '#343a40',
+    marginTop: 5,
   },
   lessonListContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 20,
-    backgroundColor: 'pink',
-    width: 400,
   },
   lessonItem: {
     width: 60,
@@ -224,17 +228,9 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#e9ecef',
     borderWidth: 2,
-    borderColor: '#ccc',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderColor: '#dee2e6',
   },
   completedLesson: {
     backgroundColor: '#aaffaa',
@@ -243,25 +239,10 @@ const styles = StyleSheet.create({
   lessonText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#495057',
   },
   completedLessonText: {
     color: '#00aa00',
-  },
-  progressContainer: {
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  progressBar: {
-    backgroundColor: '#ccc',
-    height: 20,
-    width: 200,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  progressFill: {
-    backgroundColor: '#00aa00',
-    height: '100%',
-    borderRadius: 10,
   },
   modalContainer: {
     flex: 1,
@@ -279,6 +260,17 @@ const styles = StyleSheet.create({
   modalText: {
     fontSize: 18,
     marginBottom: 20,
+    textAlign: 'center',
+  },
+  closeButton: {
+    backgroundColor: '#28a745',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
 

@@ -78,7 +78,6 @@ const NumberTracing: React.FC<LetterTracingProps> = ({
     const scaledPath = pathString.replace(/([0-9.]+)/g, match =>
       (parseFloat(match) * scale).toString(),
     );
-    console.log('Scaled Path:', scaledPath);
     return scaledPath;
   };
 

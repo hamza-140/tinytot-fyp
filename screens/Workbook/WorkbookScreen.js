@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,17 +11,23 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
-import { Input } from 'react-native-elements';
+import {Input} from 'react-native-elements';
+import {useRoute} from '@react-navigation/native';
 
 // Quiz Components
-const MultipleChoiceQuiz = ({ question, options, onAnswer }) => {
+const MultipleChoiceQuiz = ({question, options, onAnswer}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   return (
     <View>
       <Text>{question}</Text>
       {options.map(option => (
-        <TouchableOpacity key={option} onPress={() => setSelectedOption(option)}>
-          <Text style={selectedOption === option ? styles.selectedOption : null}>{option}</Text>
+        <TouchableOpacity
+          key={option}
+          onPress={() => setSelectedOption(option)}>
+          <Text
+            style={selectedOption === option ? styles.selectedOption : null}>
+            {option}
+          </Text>
         </TouchableOpacity>
       ))}
       <Button title="Submit" onPress={() => onAnswer(selectedOption)} />
@@ -29,7 +35,7 @@ const MultipleChoiceQuiz = ({ question, options, onAnswer }) => {
   );
 };
 
-const BlankSpaceQuiz = ({ question, onAnswer }) => {
+const BlankSpaceQuiz = ({question, onAnswer}) => {
   const [answer, setAnswer] = useState('');
   return (
     <View>
@@ -40,61 +46,60 @@ const BlankSpaceQuiz = ({ question, onAnswer }) => {
   );
 };
 
+const MatchingQuiz = ({pairs, onAnswer}) => {
+  const [selectedItems, setSelectedItems] = useState({});
 
-const MatchingQuiz = ({ pairs, onAnswer }) => {
-    const [selectedItems, setSelectedItems] = useState({});
-  
-    const handleSelect = (item, type) => {
-      setSelectedItems(prevState => ({
-        ...prevState,
-        [type]: item,
-      }));
-    };
-  
-    const handleSubmit = () => {
-      // Validate matches
-      const correct = pairs.every(pair => selectedItems[pair[0]] === pair[1]);
-      onAnswer(correct);
-    };
-  
-    const renderOptions = (items, type) => (
-      <View style={styles.optionsContainer}>
-        {items.map(item => (
-          <TouchableOpacity
-            key={item}
-            style={[
-              styles.option,
-              selectedItems[type] === item && styles.selectedOption,
-            ]}
-            onPress={() => handleSelect(item, type)}>
-            <Text>{item}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    );
-  
-    const leftItems = pairs.map(pair => pair[0]);
-    const rightItems = pairs.map(pair => pair[1]);
-  
-    return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>Match the following:</Text>
-        <View style={styles.matchingContainer}>
-          <View style={styles.column}>
-            <Text style={styles.columnHeading}>Column A</Text>
-            {renderOptions(leftItems, 'left')}
-          </View>
-          <View style={styles.column}>
-            <Text style={styles.columnHeading}>Column B</Text>
-            {renderOptions(rightItems, 'right')}
-          </View>
-        </View>
-        <Button title="Submit" onPress={handleSubmit} />
-      </View>
-    );
+  const handleSelect = (item, type) => {
+    setSelectedItems(prevState => ({
+      ...prevState,
+      [type]: item,
+    }));
   };
 
-const TrueFalseQuiz = ({ question, onAnswer }) => {
+  const handleSubmit = () => {
+    // Validate matches
+    const correct = pairs.every(pair => selectedItems[pair[0]] === pair[1]);
+    onAnswer(correct);
+  };
+
+  const renderOptions = (items, type) => (
+    <View style={styles.optionsContainer}>
+      {items.map(item => (
+        <TouchableOpacity
+          key={item}
+          style={[
+            styles.option,
+            selectedItems[type] === item && styles.selectedOption,
+          ]}
+          onPress={() => handleSelect(item, type)}>
+          <Text>{item}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+
+  const leftItems = pairs.map(pair => pair[0]);
+  const rightItems = pairs.map(pair => pair[1]);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.heading}>Match the following:</Text>
+      <View style={styles.matchingContainer}>
+        <View style={styles.column}>
+          <Text style={styles.columnHeading}>Column A</Text>
+          {renderOptions(leftItems, 'left')}
+        </View>
+        <View style={styles.column}>
+          <Text style={styles.columnHeading}>Column B</Text>
+          {renderOptions(rightItems, 'right')}
+        </View>
+      </View>
+      <Button title="Submit" onPress={handleSubmit} />
+    </View>
+  );
+};
+
+const TrueFalseQuiz = ({question, onAnswer}) => {
   const [answer, setAnswer] = useState(null);
   return (
     <View>
@@ -103,7 +108,9 @@ const TrueFalseQuiz = ({ question, onAnswer }) => {
         <Text style={answer === true ? styles.selectedOption : null}>True</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => setAnswer(false)}>
-        <Text style={answer === false ? styles.selectedOption : null}>False</Text>
+        <Text style={answer === false ? styles.selectedOption : null}>
+          False
+        </Text>
       </TouchableOpacity>
       <Button title="Submit" onPress={() => onAnswer(answer)} />
     </View>
@@ -111,6 +118,8 @@ const TrueFalseQuiz = ({ question, onAnswer }) => {
 };
 
 const Working = () => {
+  const route = useRoute();
+  const {category} = route.params;
   const [lessonsCompleted, setLessonsCompleted] = useState({
     English: [],
     Math: [],
@@ -119,7 +128,7 @@ const Working = () => {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
-  const [currentCategory, setCurrentCategory] = useState('English');
+  const [currentCategory, setCurrentCategory] = useState(category);
   const [currentQuiz, setCurrentQuiz] = useState(null);
   const [quizzes, setQuizzes] = useState({
     English: [],
@@ -132,12 +141,14 @@ const Working = () => {
       try {
         const currentUser = auth().currentUser;
         if (currentUser) {
-          const parentRef = firestore().collection('parents').doc(currentUser.uid);
+          const parentRef = firestore()
+            .collection('parents')
+            .doc(currentUser.uid);
           const parentDoc = await parentRef.get();
 
           if (parentDoc.exists) {
-            const quizRefs = ['English', 'Math', 'Islamiyat'].map(subject => 
-              firestore().collection('quizzes').doc(subject)
+            const quizRefs = ['English', 'Math', 'Islamiyat'].map(subject =>
+              firestore().collection('quizzes').doc(subject),
             );
 
             const quizDocs = await Promise.all(quizRefs.map(ref => ref.get()));
@@ -214,21 +225,7 @@ const Working = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Workbook</Text>
-
-      <View style={styles.categorySelector}>
-        {Object.keys(quizzes).map(category => (
-          <TouchableOpacity
-            key={category}
-            style={[
-              styles.categoryButton,
-              currentCategory === category && styles.activeCategory,
-            ]}
-            onPress={() => setCurrentCategory(category)}>
-            <Text style={styles.categoryButtonText}>{category}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <Text style={styles.heading}>{category}</Text>
 
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -250,8 +247,9 @@ const Working = () => {
                   <Text
                     style={[
                       styles.lessonText,
-                      lessonsCompleted[currentCategory].includes(quiz.question) &&
-                        styles.completedLessonText,
+                      lessonsCompleted[currentCategory].includes(
+                        quiz.question,
+                      ) && styles.completedLessonText,
                     ]}>
                     {quiz.question}
                   </Text>
@@ -266,7 +264,7 @@ const Working = () => {
               <View
                 style={[
                   styles.progressFill,
-                  { width: `${calculateTotalProgress()}%` },
+                  {width: `${calculateTotalProgress()}%`},
                 ]}
               />
             </View>

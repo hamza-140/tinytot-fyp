@@ -8,6 +8,7 @@ import {
   Modal,
   Button,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
@@ -19,13 +20,17 @@ const MultipleChoiceQuiz = ({question, options, onAnswer}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   return (
     <View>
-      <Text>{question}</Text>
+      <Text style={styles.questionText}>{question}</Text>
       {options.map(option => (
         <TouchableOpacity
           key={option}
+          style={styles.optionButton}
           onPress={() => setSelectedOption(option)}>
           <Text
-            style={selectedOption === option ? styles.selectedOption : null}>
+            style={[
+              styles.optionText,
+              selectedOption === option && styles.selectedOption,
+            ]}>
             {option}
           </Text>
         </TouchableOpacity>
@@ -39,7 +44,7 @@ const BlankSpaceQuiz = ({question, onAnswer}) => {
   const [answer, setAnswer] = useState('');
   return (
     <View>
-      <Text>{question}</Text>
+      <Text style={styles.questionText}>{question}</Text>
       <Input value={answer} onChangeText={setAnswer} />
       <Button title="Submit" onPress={() => onAnswer(answer)} />
     </View>
@@ -72,7 +77,7 @@ const MatchingQuiz = ({pairs, onAnswer}) => {
             selectedItems[type] === item && styles.selectedOption,
           ]}
           onPress={() => handleSelect(item, type)}>
-          <Text>{item}</Text>
+          <Text style={styles.optionText}>{item}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -103,12 +108,20 @@ const TrueFalseQuiz = ({question, onAnswer}) => {
   const [answer, setAnswer] = useState(null);
   return (
     <View>
-      <Text>{question}</Text>
-      <TouchableOpacity onPress={() => setAnswer(true)}>
-        <Text style={answer === true ? styles.selectedOption : null}>True</Text>
+      <Text style={styles.questionText}>{question}</Text>
+      <TouchableOpacity
+        style={styles.optionButton}
+        onPress={() => setAnswer(true)}>
+        <Text
+          style={answer === true ? styles.selectedOption : styles.optionText}>
+          True
+        </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => setAnswer(false)}>
-        <Text style={answer === false ? styles.selectedOption : null}>
+      <TouchableOpacity
+        style={styles.optionButton}
+        onPress={() => setAnswer(false)}>
+        <Text
+          style={answer === false ? styles.selectedOption : styles.optionText}>
           False
         </Text>
       </TouchableOpacity>
@@ -224,117 +237,125 @@ const Working = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>{category}</Text>
+    <ImageBackground
+      source={require('../../assets/bg.jpg')}
+      style={styles.backgroundImage}>
+      <View style={styles.container}>
+        <Text style={styles.heading}>{category}</Text>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <>
-          {currentQuiz ? (
-            renderQuiz(currentQuiz)
-          ) : (
-            <ScrollView contentContainerStyle={styles.lessonListContainer}>
-              {quizzes[currentCategory].map((quiz, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.lessonItem,
-                    lessonsCompleted[currentCategory].includes(quiz.question) &&
-                      styles.completedLesson,
-                  ]}
-                  onPress={() => startQuiz(quiz)}>
-                  <Text
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : (
+          <>
+            {currentQuiz ? (
+              renderQuiz(currentQuiz)
+            ) : (
+              <ScrollView contentContainerStyle={styles.lessonListContainer}>
+                {quizzes[currentCategory].map((quiz, index) => (
+                  <TouchableOpacity
+                    key={index}
                     style={[
-                      styles.lessonText,
+                      styles.card,
                       lessonsCompleted[currentCategory].includes(
                         quiz.question,
-                      ) && styles.completedLessonText,
-                    ]}>
-                    {quiz.question}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          )}
+                      ) && styles.completedCard,
+                    ]}
+                    onPress={() => startQuiz(quiz)}>
+                    <View style={styles.cardContent}>
+                      <Text
+                        style={[
+                          styles.cardText,
+                          lessonsCompleted[currentCategory].includes(
+                            quiz.question,
+                          ) && styles.completedCardText,
+                        ]}>
+                        {quiz.question}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
 
-          <View style={styles.progressContainer}>
-            <Text>Total Progress:</Text>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {width: `${calculateTotalProgress()}%`},
-                ]}
-              />
+            <View style={styles.progressContainer}>
+              <Text>Total Progress:</Text>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    {width: `${calculateTotalProgress()}%`},
+                  ]}
+                />
+              </View>
+              <Text>{calculateTotalProgress()}%</Text>
             </View>
-            <Text>{calculateTotalProgress()}%</Text>
-          </View>
-        </>
-      )}
+          </>
+        )}
 
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              The lesson "{selectedLesson}" is already completed!
-            </Text>
-            <Button title="OK" onPress={() => setModalVisible(false)} />
+        <Modal
+          transparent={true}
+          visible={modalVisible}
+          animationType="slide"
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalText}>
+                The lesson "{selectedLesson}" is already completed!
+              </Text>
+              <Button title="OK" onPress={() => setModalVisible(false)} />
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // translucent white background
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 16,
-  },
-  categorySelector: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 16,
-  },
-  categoryButton: {
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: '#ddd',
-  },
-  activeCategory: {
-    backgroundColor: '#007bff',
-  },
-  categoryButtonText: {
-    color: '#fff',
+    color: '#4a90e2',
   },
   lessonListContainer: {
     paddingBottom: 50,
   },
-  lessonItem: {
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    marginVertical: 8,
+    marginHorizontal: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
-  completedLesson: {
+  completedCard: {
     backgroundColor: '#d4edda',
   },
-  lessonText: {
-    fontSize: 16,
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  completedLessonText: {
+  cardText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  completedCardText: {
     textDecorationLine: 'line-through',
+    color: '#888',
   },
   progressContainer: {
     marginTop: 16,
@@ -350,7 +371,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#007bff',
+    backgroundColor: '#4a90e2',
   },
   modalContainer: {
     flex: 1,
@@ -369,9 +390,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  optionButton: {
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    borderRadius: 8,
+    marginVertical: 5,
+    alignItems: 'center',
+  },
+  optionText: {
+    fontSize: 16,
+  },
   selectedOption: {
     fontWeight: 'bold',
     backgroundColor: '#d0e1ff',
+  },
+  questionText: {
+    fontSize: 18,
+    marginBottom: 10,
+    color: '#333',
   },
   matchingContainer: {
     flexDirection: 'row',

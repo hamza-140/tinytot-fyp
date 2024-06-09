@@ -80,9 +80,9 @@ const NumberLesson = ({route, navigation}) => {
       case 2:
         return (
           <SecondMath
-          // item={item}
-          // setProgress={setProgress}
-          // progress={progress}
+            letter={item}
+            setProgress={setProgress}
+            progress={progress}
           />
         ); // Add VideoLesson component
       case 3:

@@ -67,6 +67,7 @@ const MathLesson = ({navigation}) => {
         <FlatList
           data={mathInfo ? Object.entries(mathInfo) : []}
           horizontal
+          showsHorizontalScrollIndicator={false}
           renderItem={renderLessonCards}
           keyExtractor={(item, index) => index.toString()} // Use index as key for now
           contentContainerStyle={styles.flatListContainer}
@@ -78,7 +79,7 @@ const MathLesson = ({navigation}) => {
         <TouchableOpacity
           style={styles.setting}
           onPress={() => {
-            navigation.navigate('Main');
+            navigation.goBack();
           }}>
           <Image
             source={require('../../../assets/back.png')}

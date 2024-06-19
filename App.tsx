@@ -53,6 +53,7 @@ import TrackPlayer from 'react-native-track-player';
 import NumberLesson from './screens/Math/NumberLesson';
 import ForgetPage from './screens/Authentication/ForgetPage';
 import FlashMessage from 'react-native-flash-message';
+import Addition from './screens/Math/Addition';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -104,6 +105,11 @@ const App = () => {
           <Stack.Screen
             name="Working"
             component={Working}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="Addition"
+            component={Addition}
             options={{orientation: 'landscape'}}
           />
           <Stack.Screen

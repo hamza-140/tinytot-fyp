@@ -18,7 +18,7 @@ const MathHome = ({navigation}) => {
       navigation.navigate('MathLesson');
     }
     if (id == 2) {
-      navigation.navigate('PhonicsHome');
+      navigation.navigate('Addition');
     }
     if (id == 3) {
       navigation.navigate('Shape');

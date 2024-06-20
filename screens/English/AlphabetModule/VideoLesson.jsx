@@ -1,30 +1,41 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Alert, ActivityIndicator, StyleSheet,Text ,Dimensions} from 'react-native';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  View,
+  Alert,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  Dimensions,
+} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import firestore from '@react-native-firebase/firestore';
 
-const extractVideoId = (url) => {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|.+?v=))([^?&]+)/);
+const extractVideoId = url => {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|.+?v=))([^?&]+)/,
+  );
   return match ? match[1] : null;
 };
 
-const VideoLesson = ({ letter,progress,setProgress }) => {
-  const { width, height } = Dimensions.get('window');
-  const videoHeight = height * 0.973;  // 40% of the device height
-  const videoWidth = width;    // 90% of the device width
+const VideoLesson = ({letter, progress, setProgress}) => {
+  const {width, height} = Dimensions.get('window');
+  const videoHeight = height * 0.973; // 40% of the device height
+  const videoWidth = width; // 90% of the device width
   const [playing, setPlaying] = useState(false);
   const [videoId, setVideoId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("inside vid:",letter)
     const fetchVideoUrl = async () => {
       try {
-        const doc = await firestore().collection('alphabetVideos').doc(letter).get();
+        const doc = await firestore()
+          .collection('alphabetVideos')
+          .doc(letter)
+          .get();
         if (doc.exists) {
           const videoUrl = doc.data().url;
           const id = extractVideoId(videoUrl);
-          console.log(id)
+          console.log(id);
           if (id) {
             if (progress === 20) {
               setProgress(40);
@@ -48,7 +59,7 @@ const VideoLesson = ({ letter,progress,setProgress }) => {
     fetchVideoUrl();
   }, [letter]);
 
-  const onStateChange = useCallback((state) => {
+  const onStateChange = useCallback(state => {
     if (state === 'ended') {
       setPlaying(false);
       Alert.alert('Video has finished playing!');
@@ -75,7 +86,9 @@ const VideoLesson = ({ letter,progress,setProgress }) => {
         />
       ) : (
         <View style={styles.errorContainer}>
-          <Text style={{color:'black'}}>No video available for this letter</Text>
+          <Text style={{color: 'black'}}>
+            No video available for this letter
+          </Text>
         </View>
       )}
     </View>
@@ -83,14 +96,13 @@ const VideoLesson = ({ letter,progress,setProgress }) => {
 };
 
 const styles = StyleSheet.create({
-  
   loadingContainer: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
   errorContainer: {
-    display:'flex',
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },

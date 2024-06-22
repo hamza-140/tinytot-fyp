@@ -54,6 +54,7 @@ import NumberLesson from './screens/Math/NumberLesson';
 import ForgetPage from './screens/Authentication/ForgetPage';
 import FlashMessage from 'react-native-flash-message';
 import Addition from './screens/Math/Addition';
+import IslamLesson from './screens/Islamic/IslamLesson';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -196,6 +197,11 @@ const App = () => {
           <Stack.Screen
             name="Islamic"
             component={IslamicHome}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="IslamLesson"
+            component={IslamLesson}
             options={{orientation: 'landscape'}}
           />
           <Stack.Screen

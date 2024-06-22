@@ -50,7 +50,7 @@ const MathLesson = ({navigation}) => {
   }, []);
 
   const handleCardPress = item => {
-    navigation.navigate('NumberLesson', {item: item});
+    navigation.navigate('IslamLesson', {item: item});
     console.log(item);
   };
   // Function to render lesson cards

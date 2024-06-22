@@ -14,6 +14,7 @@ import ParentComponent from './ParentComponent';
 import MathComponent from './MathComponent';
 import {PieChart} from 'react-native-gifted-charts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import IslamComponent from './IslamComponent';
 
 const WorkbookScreen = () => {
   const [lessonsCompleted, setLessonsCompleted] = useState({
@@ -45,6 +46,17 @@ const WorkbookScreen = () => {
               setLessonsCompleted(prevState => ({
                 ...prevState,
                 English: completedLessons,
+              }));
+            }
+            const islamiyat = parentDoc.data().islamiyat;
+            if (islamiyat) {
+              const completedLessons = Object.keys(islamiyat)
+                .filter(key => islamiyat[key].isCompleted)
+                .sort();
+              console.log('islam:', completedLessons.length);
+              setLessonsCompleted(prevState => ({
+                ...prevState,
+                Islamiyat: completedLessons,
               }));
             }
             const math = parentDoc.data().math;
@@ -93,11 +105,29 @@ const WorkbookScreen = () => {
         100,
     );
   };
+  const [totalLessons, setTotalLessons] = useState([]);
+
+  useEffect(() => {
+    const fetchTotalLessons = async () => {
+      try {
+        const querySnapshot = await firestore().collection('islamVideos').get();
+        const lessons = [];
+        querySnapshot.forEach(doc => {
+          lessons.push(doc.id); // Collect the document IDs
+        });
+        setTotalLessons(lessons); // Update the state with the fetched IDs
+      } catch (error) {
+        console.error('Error fetching total lessons:', error);
+      }
+    };
+
+    fetchTotalLessons();
+  }, []);
 
   const categories = {
     English: Array.from(Array(26), (e, i) => String.fromCharCode(65 + i)),
     Math: Array.from(Array(10), (e, i) => i.toString()),
-    Islamiyat: ['Lesson 1', 'Lesson 2', 'Lesson 3'],
+    Islamiyat: totalLessons,
   };
 
   return (
@@ -137,27 +167,8 @@ const WorkbookScreen = () => {
           ) : currentCategory === 'Math' ? (
             <MathComponent widthBar={calculateTotalProgress()} />
           ) : (
-            <ScrollView contentContainerStyle={styles.lessonListContainer}>
-              {categories[currentCategory].map(lesson => (
-                <TouchableOpacity
-                  key={lesson}
-                  style={[
-                    styles.lessonItem,
-                    lessonsCompleted[currentCategory].includes(lesson) &&
-                      styles.completedLesson,
-                  ]}
-                  onPress={() => toggleLessonCompletion(lesson)}>
-                  <Text
-                    style={[
-                      styles.lessonText,
-                      lessonsCompleted[currentCategory].includes(lesson) &&
-                        styles.completedLessonText,
-                    ]}>
-                    {lesson}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+            <IslamComponent
+              widthBar={calculateTotalProgress()}></IslamComponent>
           )}
         </>
       )}

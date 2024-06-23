@@ -13,7 +13,7 @@ import {Input, Slider} from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 
 const KidProfileScreen = ({navigation, route}) => {
-  const {parentId, kidInfo} = route.params;
+  const {parentId, kidInfo, isEdit} = route.params;
   const [name, setName] = useState(kidInfo?.name || '');
   const [age, setAge] = useState(Number(kidInfo?.age) || 3);
   const [gender, setGender] = useState(kidInfo?.gender || '');
@@ -35,6 +35,8 @@ const KidProfileScreen = ({navigation, route}) => {
     <TouchableOpacity onPress={onPress}>
       <Image
         source={imageSource}
+        width={30}
+        height={30}
         style={[
           styles.avatarImage,
           isSelected && {borderColor: 'green', borderWidth: 4},
@@ -109,7 +111,7 @@ const KidProfileScreen = ({navigation, route}) => {
           inputContainerStyle={{
             borderBottomWidth: 0,
           }}
-          labelStyle={{color: 'grey', fontSize: 16}}
+          labelStyle={{color: 'grey', fontSize: 16, marginBottom: 10}}
           label={'Kid Name'}
           style={styles.input}
           placeholder="Name"
@@ -154,13 +156,15 @@ const KidProfileScreen = ({navigation, route}) => {
           isDisabled={name === '' || age === '' || gender === ''}
           onPress={handleSave}
         />
-        <Button
-          buttonStyle={styles.btn}
-          title="Return"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        {isEdit && (
+          <Button
+            buttonStyle={styles.btn}
+            title="Return"
+            onPress={() => {
+              navigation.goBack();
+            }}
+          />
+        )}
       </View>
     </ScrollView>
   );
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 20,
     fontSize: 18,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   avatarContainer: {
     marginTop: 10,
@@ -241,9 +245,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   avatarImage: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 80,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 40,
   },
   picker: {
     height: 40,

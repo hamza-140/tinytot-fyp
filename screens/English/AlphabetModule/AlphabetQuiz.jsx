@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
-
 import Svg, {Path, Circle, Rect} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -34,7 +33,7 @@ const squares = [
   {x: 475, y: 175 - 140, color: 'yellow'},
 ];
 
-const App = () => {
+const AlphabetQuiz = ({progress, setProgress, letter}) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showAnimationFail, setShowAnimationFail] = useState(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
@@ -43,10 +42,48 @@ const App = () => {
   const [currentPath, setCurrentPath] = useState('');
   const [isDrawing, setIsDrawing] = useState(false);
   const [startColor, setStartColor] = useState(null);
+  const [leftColumn, setLeftColumn] = useState([]);
+  const [rightColumn, setRightColumn] = useState([]);
 
   useEffect(() => {
-    console.log(count);
-    if (count == 4) {
+    generateRandomLetters();
+  }, [letter]);
+
+  const generateRandomLetters = () => {
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let remainingLetters = alphabet.replace(new RegExp(letter, 'gi'), '');
+    const randomLetters = [];
+    while (randomLetters.length < 3) {
+      const randomIndex = Math.floor(Math.random() * remainingLetters.length);
+      randomLetters.push(remainingLetters[randomIndex]);
+      remainingLetters = remainingLetters.replace(
+        remainingLetters[randomIndex],
+        '',
+      );
+    }
+
+    const leftColumnLetters = [letter.toUpperCase(), ...randomLetters];
+    const rightColumnLetters = [
+      letter.toLowerCase(),
+      ...randomLetters.map(l => l.toLowerCase()),
+    ];
+
+    shuffleArray(leftColumnLetters);
+    shuffleArray(rightColumnLetters);
+
+    setLeftColumn(leftColumnLetters);
+    setRightColumn(rightColumnLetters);
+  };
+
+  const shuffleArray = array => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  };
+
+  useEffect(() => {
+    if (count === 4) {
       setShowCongratulations(true);
     }
   }, [count]);
@@ -112,10 +149,11 @@ const App = () => {
       <Svg style={styles.svg} {...panResponder.panHandlers}>
         <View style={styles.gameContainer}>
           <View style={styles.lettersColumn}>
-            <Text style={styles.letter}>A</Text>
-            <Text style={styles.letter}>B</Text>
-            <Text style={styles.letter}>C</Text>
-            <Text style={styles.letter}>D</Text>
+            {leftColumn.map((letter, index) => (
+              <Text key={index} style={styles.letter}>
+                {letter}
+              </Text>
+            ))}
           </View>
           {paths.map((path, index) => (
             <Path
@@ -147,7 +185,6 @@ const App = () => {
               fill={square.color}
             />
           ))}
-
           <View style={styles.spacer} />
           <Modal
             visible={showAnimation}
@@ -216,10 +253,11 @@ const App = () => {
             </TouchableWithoutFeedback>
           </Modal>
           <View style={styles.lettersColumn}>
-            <Text style={styles.letterRight}>b</Text>
-            <Text style={styles.letterRight}>c</Text>
-            <Text style={styles.letterRight}>a</Text>
-            <Text style={styles.letterRight}>d</Text>
+            {rightColumn.map((letter, index) => (
+              <Text key={index} style={styles.letterRight}>
+                {letter}
+              </Text>
+            ))}
           </View>
         </View>
       </Svg>
@@ -302,7 +340,6 @@ const styles = StyleSheet.create({
   letter: {
     fontSize: 30,
     width: 50,
-    marginLeft: 130,
     height: 50,
     textAlign: 'center',
     lineHeight: 50,
@@ -329,4 +366,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default AlphabetQuiz;

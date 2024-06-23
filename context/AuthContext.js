@@ -176,7 +176,7 @@ const signup =
       await Keychain.setGenericPassword('token', token);
       console.log('here');
       dispatch({type: SIGNUP, payload: token});
-      navigate('KidProfile', {parentId: user.uid});
+      navigate('KidProfile', {parentId: user.uid, isEdit: false});
     } catch (error) {
       console.error('Error during signup:', error);
       dispatch({

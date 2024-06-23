@@ -1,5 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, Image, StyleSheet, Modal,TouchableOpacity, ImageBackground} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  ImageBackground,
+} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {Context} from '../context/AuthContext';
@@ -13,7 +21,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const {signout} = useContext(Context);
   const navigation = useNavigation();
-  const [imageSrc, setImageSrc] = useState(require('../assets/images/avatars/bear.png'));
+  const [imageSrc, setImageSrc] = useState(
+    require('../assets/images/avatars/bear.png'),
+  );
   const openModal = () => {
     setModalVisible(true);
   };
@@ -80,8 +90,7 @@ const Profile = () => {
   return (
     <ImageBackground
       source={require('../assets/images/profile-bg.jpg')}
-      style={styles.background}
-    >
+      style={styles.background}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -101,13 +110,10 @@ const Profile = () => {
                 style={styles.exitButton}
                 onPress={() => {
                   signout();
-
                 }}>
                 <Text style={styles.closeButtonText}>Logout</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={closeModal}>
+              <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
                 <Text style={styles.closeButtonText}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -133,12 +139,11 @@ const Profile = () => {
             <Text style={styles.text}>{kidInfo?.gender || 'N/A'}</Text>
           </View>
           <View style={styles.buttonContainer}>
-          <TouchableOpacity
+            <TouchableOpacity
               style={styles.button}
               onPress={() => {
                 navigation.navigate('Main');
-              }}
-            >
+              }}>
               <Icon name="arrow-left" size={24} color="white" />
               <Text style={styles.buttonText}>Return</Text>
             </TouchableOpacity>
@@ -148,19 +153,18 @@ const Profile = () => {
                 navigation.navigate('KidProfile', {
                   parentId: auth().currentUser.uid,
                   kidInfo: kidInfo || {},
+                  isEdit: true,
                 });
-              }}
-            >
+              }}>
               <Icon name="edit" size={24} color="white" />
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
-                openModal()
-              }}
-            >
+                openModal();
+              }}>
               <Icon name="sign-out" size={24} color="white" />
               <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
@@ -212,7 +216,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontFamily: 'PFSquareSansPro-Bold-subset',
-
   },
   modalTitle: {
     fontSize: 20,
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 5,
@@ -275,8 +278,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'black',
     fontSize: 18,
-    textTransform:'capitalize',
-
+    textTransform: 'capitalize',
   },
   buttonContainer: {
     flexDirection: 'row',

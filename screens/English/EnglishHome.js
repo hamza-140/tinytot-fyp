@@ -23,19 +23,23 @@ const EnglishHome = ({navigation}) => {
     if (id == 3) {
       navigation.navigate('Shape');
     }
-    if(id==4){
-      navigation.navigate('Animals')
+    if (id == 4) {
+      navigation.navigate('Animals');
     }
-    
   };
   const data = [
-    {id: '1', title: 'Lessons',bg:'#FF6F61',img:1},
-    {id: '2', title: 'Phonics',bg:'#800080',img:2},
-    {id: '3', title: 'Shapes',bg:'#1E90FF',img:3},
-    {id: '4', title: 'Animals',bg:"#FFA500",img:4},
+    {id: '1', title: 'Lessons', bg: '#FF6F61', img: 1},
+    // {id: '2', title: 'Phonics',bg:'#800080',img:2},
+    {id: '3', title: 'Shapes', bg: '#1E90FF', img: 3},
+    {id: '4', title: 'Animals', bg: '#FFA500', img: 4},
   ];
   const renderCard = ({item}) => (
-    <CardMenu letter={item.title} onPress={() => start(item.id)} bg={item.bg} img={item.img}/>
+    <CardMenu
+      letter={item.title}
+      onPress={() => start(item.id)}
+      bg={item.bg}
+      img={item.img}
+    />
   );
 
   return (

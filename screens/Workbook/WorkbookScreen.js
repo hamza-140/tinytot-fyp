@@ -271,6 +271,7 @@ const Working = () => {
                         ]}>
                         {quiz.question}
                       </Text>
+                      {}
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -347,6 +348,7 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   cardText: {

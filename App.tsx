@@ -55,6 +55,10 @@ import ForgetPage from './screens/Authentication/ForgetPage';
 import FlashMessage from 'react-native-flash-message';
 import Addition from './screens/Math/Addition';
 import IslamLesson from './screens/Islamic/IslamLesson';
+import TestMap from './TestMap';
+import Subtraction from './screens/Math/Subtraction';
+import Multiplication from './screens/Math/Multiplication';
+import Division from './screens/Math/Divison';
 // import CardComponent from './components/CardComponent';
 
 const Stack = createNativeStackNavigator();
@@ -111,6 +115,21 @@ const App = () => {
           <Stack.Screen
             name="Addition"
             component={Addition}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="Subtraction"
+            component={Subtraction}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="Multiplication"
+            component={Multiplication}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="Division"
+            component={Division}
             options={{orientation: 'landscape'}}
           />
           <Stack.Screen
@@ -202,6 +221,11 @@ const App = () => {
           <Stack.Screen
             name="IslamLesson"
             component={IslamLesson}
+            options={{orientation: 'landscape'}}
+          />
+          <Stack.Screen
+            name="TestMap"
+            component={TestMap}
             options={{orientation: 'landscape'}}
           />
           <Stack.Screen

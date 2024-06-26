@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {useIsFocused} from '@react-navigation/native';
+import SoundPlayer from 'react-native-sound-player';
 
 import {
   StyleSheet,
@@ -20,6 +21,7 @@ import SideMenu from 'react-native-side-menu-updated';
 import Menu from './Menu'; // Adjust the import based on your file structure
 import CardComponent from '../../components/CardComponent';
 import auth from '@react-native-firebase/auth';
+
 const MainMenu = ({navigation, route}) => {
   const isFocused = useIsFocused();
   const {signout} = useContext(Context);
@@ -29,11 +31,26 @@ const MainMenu = ({navigation, route}) => {
   const [setting, setSetting] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State to control the side menu
 
+  useEffect(() => {
+    try {
+      // play the file tone.mp3
+      // SoundPlayer.playSoundFile('tone', 'mp3')
+      // // or play from url
+
+      // or play file from folder
+      if (isFocused) {
+        SoundPlayer.playAsset(require('../../assets/sounds/bgm.mp3'));
+      }
+    } catch (e) {
+      console.log(`cannot play the sound file`, e);
+    }
+  }, []);
   const start = id => {
     if (id == 1) {
       //      sound.stop();
       setSimg(require('../../assets/soundOff.png'));
       navigation.navigate('English');
+      SoundPlayer.stop();
     } else if (id == 2) {
       ////      sound.stop();
       setSimg(require('../../assets/soundOff.png'));

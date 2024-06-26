@@ -10,6 +10,7 @@ import {
   Share,
 } from 'react-native';
 import ShareMe from '../../components/Share';
+import SoundPlayer from 'react-native-sound-player';
 
 const Menu = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -124,6 +125,7 @@ const Menu = ({navigation}) => {
               <TouchableOpacity
                 style={styles.exitButton}
                 onPress={() => {
+                  SoundPlayer.stop();
                   // BackHandler.exitApp();
                 }}>
                 <Text style={styles.closeButtonText}>Music : ON/OFF</Text>

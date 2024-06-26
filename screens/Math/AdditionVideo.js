@@ -11,11 +11,11 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 
 const {width, height} = Dimensions.get('window');
 
-export default function AdditionVideo() {
+export default function AdditionVideo({vidId, progress, setProgress}) {
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const videoId = 'mjlsSYLLOSE'; // Static video ID
+  const videoId = vidId; // Static video ID
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
@@ -49,7 +49,12 @@ export default function AdditionVideo() {
           videoId={videoId}
           onChangeState={onStateChange}
           onError={handleError}
-          onReady={() => setLoading(false)}
+          onReady={() => {
+            if (progress < 50) {
+              setProgress(50);
+            }
+            setLoading(false);
+          }}
         />
       </View>
     </View>

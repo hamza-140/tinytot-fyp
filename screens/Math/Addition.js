@@ -16,6 +16,7 @@ import FirstMath from '../Math/MathModule/FirstMath';
 import SecondMath from './MathModule/SecondMath';
 import NumberTracing from './MathModule/NumberTracing';
 import AdditionVideo from './AdditionVideo';
+import DragGame from './DragGame';
 // import LetterTracing from './LetterTracing';
 // import AlphabetMatching from './AlphabetMatching';
 
@@ -32,7 +33,7 @@ const Addition = ({route, navigation}) => {
           .collection('parents')
           .doc(currentUser.uid);
         const parentDoc = await parentRef.get();
-        const math = parentDoc.data().math;
+        const math = parentDoc.data().addition;
 
         const keys = Object.keys(math).sort();
         const currentIndex = keys.indexOf(item);
@@ -60,52 +61,32 @@ const Addition = ({route, navigation}) => {
     }
   };
 
-  useEffect(() => {
-    if (progress === 100) {
-      updateFirestore();
-    }
-  }, [progress]);
+  // useEffect(() => {
+  //   if (progress === 100) {
+  //     updateFirestore();
+  //   }
+  // }, [progress]);
 
   const [page, setPage] = useState(1);
 
   const renderComponent = () => {
     switch (page) {
       case 1:
-        return <AdditionVideo />;
+        return (
+          <AdditionVideo
+            vidId={'mjlsSYLLOSE'}
+            progress={progress}
+            setProgress={setProgress}
+          />
+        );
       case 2:
         return (
-          <SecondMath
-            letter={item}
+          <DragGame
+            // letter={item}
             setProgress={setProgress}
             progress={progress}
           />
         ); // Add VideoLesson component
-      case 3:
-        return (
-          <NumberTracing
-            letter={item}
-            setProgress={setProgress}
-            progress={progress}
-          />
-        ); // Add VideoLesson component
-      case 4:
-        return (
-          <FirstComponent
-            item={item}
-            setProgress={setProgress}
-            progress={progress}
-          />
-        );
-      // case 3:
-      //   return <AlphabetQuiz letter={item} />;
-      case 5:
-        return (
-          <FirstComponent
-            item={item}
-            setProgress={setProgress}
-            progress={progress}
-          />
-        );
       default:
         return null;
     }
@@ -118,7 +99,7 @@ const Addition = ({route, navigation}) => {
   };
 
   const handleNext = () => {
-    if (page < 5) {
+    if (page < 3) {
       setPage(page + 1);
     }
   };
@@ -139,11 +120,11 @@ const Addition = ({route, navigation}) => {
         <TouchableOpacity
           style={styles.nextButton}
           onPress={handleNext}
-          disabled={page === 5}>
+          disabled={page === 2}>
           <Icon
             name="arrow-right"
             size={30}
-            color={page === 5 ? 'gray' : 'white'}
+            color={page === 2 ? 'gray' : 'white'}
           />
         </TouchableOpacity>
       </View>

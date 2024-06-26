@@ -21,10 +21,13 @@ const MathHome = ({navigation}) => {
       navigation.navigate('Addition');
     }
     if (id == 3) {
-      navigation.navigate('Shape');
+      navigation.navigate('Subtraction');
     }
     if (id == 4) {
-      navigation.navigate('Animals');
+      navigation.navigate('Multiplication');
+    }
+    if (id == 5) {
+      navigation.navigate('Division');
     }
   };
   const data = [

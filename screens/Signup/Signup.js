@@ -30,7 +30,7 @@ const Signup = ({navigation}) => {
   const {signup, state} = useContext(Context);
   let errorMessage = state.errorMessage;
   const [err, setErr] = useState(errorMessage);
-  const [errors, setErrors] = React.useState({});
+  const [errors, setErrors] = useState({});
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,9 +50,9 @@ const Signup = ({navigation}) => {
       );
 
       try {
+        setIsRegistering(true);
         // Call signup function
         await signup({name, email, password});
-        setIsRegistering(true);
         setErr(state.errorMessage);
       } catch (error) {
         // If registration fails, set the registering state back to false
@@ -71,6 +71,7 @@ const Signup = ({navigation}) => {
         message: 'Please fix the errors below',
         type: 'danger',
       });
+      setIsRegistering(false); // Reset registering state if validation fails
     }
   };
 
@@ -131,8 +132,13 @@ const Signup = ({navigation}) => {
           errorMessage={errors.password}
         />
         {err ? <Text style={{color: 'red'}}>{err}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Register</Text>
+        <TouchableOpacity
+          style={[styles.button, isRegistering && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={isRegistering}>
+          <Text style={styles.buttonText}>
+            {isRegistering ? 'Registering...' : 'Register'}
+          </Text>
         </TouchableOpacity>
         <View
           style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
@@ -200,11 +206,11 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 50,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFF',
     borderRadius: 25,
     paddingHorizontal: 20,
     fontSize: 18,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   button: {
     width: '100%',
@@ -214,6 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    marginTop: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -227,6 +234,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  buttonDisabled: {
+    backgroundColor: '#888888',
   },
   forgotPassword: {
     color: '#004d4d',

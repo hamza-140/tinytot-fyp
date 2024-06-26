@@ -19,7 +19,7 @@ const FirstMath = ({item, setProgress, progress}) => {
     if (letter) {
       Tts.speak(letter);
       if (progress === 0) {
-        setProgress(25);
+        setProgress(33);
       } else {
         setProgress(progress);
       }

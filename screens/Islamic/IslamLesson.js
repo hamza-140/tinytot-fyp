@@ -66,7 +66,7 @@ export default function IslamLesson({route, navigation}) {
         console.log(
           `Updated isCompleted for ${item} and status for ${nextItem}`,
         );
-        // navigation.navigate('EnglishLesson');
+        navigation.navigate('Main');
       } else {
         console.log('User not logged in');
       }
@@ -99,6 +99,7 @@ export default function IslamLesson({route, navigation}) {
     };
 
     fetchVideoUrl();
+    console.log('width:', width);
   }, [item]);
 
   const onStateChange = useCallback(state => {

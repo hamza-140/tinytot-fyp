@@ -10,8 +10,10 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
+
 import Svg, {Path, Circle, Rect} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {navigate} from '../../../ref/navigationRef';
 
 const circleX = 200;
 const circleX2 = 200;
@@ -33,7 +35,7 @@ const squares = [
   {x: 475, y: 175 - 140, color: 'yellow'},
 ];
 
-const AlphabetQuiz = ({progress, setProgress, letter}) => {
+const AlphabetQuiz = ({letter, progress, setProgress}) => {
   const [showAnimation, setShowAnimation] = useState(false);
   const [showAnimationFail, setShowAnimationFail] = useState(false);
   const [showCongratulations, setShowCongratulations] = useState(false);
@@ -42,49 +44,14 @@ const AlphabetQuiz = ({progress, setProgress, letter}) => {
   const [currentPath, setCurrentPath] = useState('');
   const [isDrawing, setIsDrawing] = useState(false);
   const [startColor, setStartColor] = useState(null);
-  const [leftColumn, setLeftColumn] = useState([]);
-  const [rightColumn, setRightColumn] = useState([]);
 
   useEffect(() => {
-    generateRandomLetters();
-  }, [letter]);
-
-  const generateRandomLetters = () => {
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let remainingLetters = alphabet.replace(new RegExp(letter, 'gi'), '');
-    const randomLetters = [];
-    while (randomLetters.length < 3) {
-      const randomIndex = Math.floor(Math.random() * remainingLetters.length);
-      randomLetters.push(remainingLetters[randomIndex]);
-      remainingLetters = remainingLetters.replace(
-        remainingLetters[randomIndex],
-        '',
-      );
-    }
-
-    const leftColumnLetters = [letter.toUpperCase(), ...randomLetters];
-    const rightColumnLetters = [
-      letter.toLowerCase(),
-      ...randomLetters.map(l => l.toLowerCase()),
-    ];
-
-    shuffleArray(leftColumnLetters);
-    shuffleArray(rightColumnLetters);
-
-    setLeftColumn(leftColumnLetters);
-    setRightColumn(rightColumnLetters);
-  };
-
-  const shuffleArray = array => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  };
-
-  useEffect(() => {
-    if (count === 4) {
+    console.log(count);
+    if (count == 4) {
       setShowCongratulations(true);
+      if (progress == 80) {
+        setProgress(100);
+      }
     }
   }, [count]);
 
@@ -149,11 +116,10 @@ const AlphabetQuiz = ({progress, setProgress, letter}) => {
       <Svg style={styles.svg} {...panResponder.panHandlers}>
         <View style={styles.gameContainer}>
           <View style={styles.lettersColumn}>
-            {leftColumn.map((letter, index) => (
-              <Text key={index} style={styles.letter}>
-                {letter}
-              </Text>
-            ))}
+            <Text style={styles.letter}>{letter.toUpperCase()}</Text>
+            <Text style={styles.letter}>B</Text>
+            <Text style={styles.letter}>C</Text>
+            <Text style={styles.letter}>D</Text>
           </View>
           {paths.map((path, index) => (
             <Path
@@ -185,6 +151,7 @@ const AlphabetQuiz = ({progress, setProgress, letter}) => {
               fill={square.color}
             />
           ))}
+
           <View style={styles.spacer} />
           <Modal
             visible={showAnimation}
@@ -224,6 +191,7 @@ const AlphabetQuiz = ({progress, setProgress, letter}) => {
                     style={styles.animation}
                     onAnimationFinish={() => {
                       setShowCongratulations(false);
+                      navigate('English');
                     }}
                   />
                 </View>
@@ -253,11 +221,10 @@ const AlphabetQuiz = ({progress, setProgress, letter}) => {
             </TouchableWithoutFeedback>
           </Modal>
           <View style={styles.lettersColumn}>
-            {rightColumn.map((letter, index) => (
-              <Text key={index} style={styles.letterRight}>
-                {letter}
-              </Text>
-            ))}
+            <Text style={styles.letterRight}>b</Text>
+            <Text style={styles.letterRight}>c</Text>
+            <Text style={styles.letterRight}>{letter.toLowerCase()}</Text>
+            <Text style={styles.letterRight}>d</Text>
           </View>
         </View>
       </Svg>
@@ -340,6 +307,7 @@ const styles = StyleSheet.create({
   letter: {
     fontSize: 30,
     width: 50,
+    marginLeft: 130,
     height: 50,
     textAlign: 'center',
     lineHeight: 50,

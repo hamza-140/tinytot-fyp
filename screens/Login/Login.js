@@ -26,12 +26,13 @@ const validationSchema = yup.object().shape({
 
 const Login = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [errors, setErrors] = React.useState({});
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const {signin, state} = useContext(Context);
   let errorMessage = state.errorMessage;
   const [err, setErr] = useState(errorMessage);
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // State variable to track login status
 
   const handleSubmit = async () => {
     try {
@@ -39,10 +40,12 @@ const Login = () => {
       await validationSchema.validate({email, password}, {abortEarly: false});
 
       try {
-        signin({email, password});
+        setIsLoggingIn(true);
+        await signin({email, password});
         setErr(state.errorMessage);
       } catch (err) {
         console.log(err);
+        setIsLoggingIn(false); // Reset logging in state if login fails
       }
       setEmail('');
       setPassword('');
@@ -57,6 +60,7 @@ const Login = () => {
         message: 'Please fix the errors below',
         type: 'danger',
       });
+      setIsLoggingIn(false); // Reset logging in state if validation fails
     }
   };
 
@@ -101,8 +105,13 @@ const Login = () => {
           errorMessage={errors.password}
         />
         {err ? <Text style={{color: 'red'}}>{err}</Text> : null}
-        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Log In</Text>
+        <TouchableOpacity
+          style={[styles.button, isLoggingIn && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={isLoggingIn}>
+          <Text style={styles.buttonText}>
+            {isLoggingIn ? 'Logging in...' : 'Log In'}
+          </Text>
         </TouchableOpacity>
         <View
           style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
@@ -176,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingHorizontal: 20,
     fontSize: 18,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   button: {
     width: '100%',
@@ -186,6 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
+    marginTop: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -199,6 +209,9 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  buttonDisabled: {
+    backgroundColor: '#888888',
   },
   forgotPassword: {
     color: '#004d4d',

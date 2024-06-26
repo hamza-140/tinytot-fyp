@@ -43,8 +43,8 @@ export default function SecondMath({letter, progress, setProgress}) {
           const id = extractVideoId(videoUrl);
           console.log(id);
           if (id) {
-            if (progress === 20) {
-              setProgress(40);
+            if (progress === 33) {
+              setProgress(66);
             } else {
               setProgress(progress);
             }

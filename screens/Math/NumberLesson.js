@@ -50,7 +50,7 @@ const NumberLesson = ({route, navigation}) => {
         console.log(
           `Updated isCompleted for ${item} and status for ${nextItem}`,
         );
-        // navigation.navigate('EnglishLesson');
+        navigation.navigate('Math');
       } else {
         console.log('User not logged in');
       }
@@ -93,24 +93,6 @@ const NumberLesson = ({route, navigation}) => {
             progress={progress}
           />
         ); // Add VideoLesson component
-      case 4:
-        return (
-          <FirstComponent
-            item={item}
-            setProgress={setProgress}
-            progress={progress}
-          />
-        );
-      // case 3:
-      //   return <AlphabetQuiz letter={item} />;
-      case 5:
-        return (
-          <FirstComponent
-            item={item}
-            setProgress={setProgress}
-            progress={progress}
-          />
-        );
       default:
         return null;
     }
@@ -123,7 +105,7 @@ const NumberLesson = ({route, navigation}) => {
   };
 
   const handleNext = () => {
-    if (page < 5) {
+    if (page < 4) {
       setPage(page + 1);
     }
   };
@@ -144,11 +126,11 @@ const NumberLesson = ({route, navigation}) => {
         <TouchableOpacity
           style={styles.nextButton}
           onPress={handleNext}
-          disabled={page === 5}>
+          disabled={page === 3}>
           <Icon
             name="arrow-right"
             size={30}
-            color={page === 5 ? 'gray' : 'white'}
+            color={page === 3 ? 'gray' : 'white'}
           />
         </TouchableOpacity>
       </View>

@@ -23,6 +23,7 @@ import {
   runOnJS,
 } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {navigate} from '../../../ref/navigationRef';
 
 const {width, height} = Dimensions.get('window');
 interface LetterTracingProps {
@@ -126,8 +127,9 @@ const NumberTracing: React.FC<LetterTracingProps> = ({
     if (isCompleted > 185) {
       Alert.alert('YEAH!');
       Tts.speak('Well done!');
-      if (progress === 40) {
-        setProgress(60);
+      if (progress === 66) {
+        setProgress(100);
+        navigate('Math');
       } else {
         setProgress(progress);
       }

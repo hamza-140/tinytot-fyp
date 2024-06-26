@@ -31,20 +31,20 @@ const MainMenu = ({navigation, route}) => {
   const [setting, setSetting] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State to control the side menu
 
-  useEffect(() => {
-    try {
-      // play the file tone.mp3
-      // SoundPlayer.playSoundFile('tone', 'mp3')
-      // // or play from url
+  // useEffect(() => {
+  //   try {
+  //     // play the file tone.mp3
+  //     // SoundPlayer.playSoundFile('tone', 'mp3')
+  //     // // or play from url
 
-      // or play file from folder
-      if (isFocused) {
-        SoundPlayer.playAsset(require('../../assets/sounds/bgm.mp3'));
-      }
-    } catch (e) {
-      console.log(`cannot play the sound file`, e);
-    }
-  }, []);
+  //     // or play file from folder
+  //     if (isFocused) {
+  //       SoundPlayer.playAsset(require('../../assets/sounds/bgm.mp3'));
+  //     }
+  //   } catch (e) {
+  //     console.log(`cannot play the sound file`, e);
+  //   }
+  // }, []);
   const start = id => {
     if (id == 1) {
       //      sound.stop();

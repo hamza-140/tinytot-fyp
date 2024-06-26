@@ -15,7 +15,6 @@ import auth from '@react-native-firebase/auth';
 import {Input} from 'react-native-elements';
 import {useRoute} from '@react-navigation/native';
 
-// Quiz Components
 const MultipleChoiceQuiz = ({question, options, onAnswer}) => {
   const [selectedOption, setSelectedOption] = useState(null);
   return (
@@ -62,7 +61,6 @@ const MatchingQuiz = ({pairs, onAnswer}) => {
   };
 
   const handleSubmit = () => {
-    // Validate matches
     const correct = pairs.every(pair => selectedItems[pair[0]] === pair[1]);
     onAnswer(correct);
   };
@@ -148,6 +146,11 @@ const Working = () => {
     Math: [],
     Islamiyat: [],
   });
+  const [userProgress, setUserProgress] = useState({
+    englishWorkbookProgress: [],
+    mathWorkbookProgress: [],
+    islamiyatWorkbookProgress: [],
+  });
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -169,10 +172,17 @@ const Working = () => {
               acc[doc.id] = doc.data().quizzes;
               return acc;
             }, {});
-
+            console.log(quizzesData['English']);
             setQuizzes(quizzesData);
           } else {
             console.log('Parent document does not exist');
+          }
+
+          // Fetch user progress
+          const userRef = firestore().collection('users').doc(currentUser.uid);
+          const userDoc = await userRef.get();
+          if (userDoc.exists) {
+            setUserProgress(userDoc.data());
           }
         } else {
           console.log('User not logged in');
@@ -207,44 +217,164 @@ const Working = () => {
     setCurrentQuiz(quiz);
   };
 
-  const handleQuizAnswer = answer => {
+  const handleQuizAnswer = async (answer, quizId) => {
     console.log('Answered:', answer);
+    if (answer === true) {
+      // Assume correct answer is 'true'
+      try {
+        const currentUser = auth().currentUser;
+        if (currentUser) {
+          const parentRef = firestore()
+            .collection('parents')
+            .doc(currentUser.uid);
+          const userRef = firestore().collection('users').doc(currentUser.uid);
+
+          // Get the parent and user documents
+          const parentDoc = await parentRef.get();
+          const userDoc = await userRef.get();
+
+          // Update the parent's progress array
+          if (parentDoc.exists) {
+            const parentData = parentDoc.data();
+            const parentProgress =
+              parentData[`${currentCategory.toLowerCase()}WorkbookProgress`] ||
+              [];
+            if (!parentProgress.includes(quizId)) {
+              parentProgress.push(quizId);
+              await parentRef.update({
+                [`${currentCategory.toLowerCase()}WorkbookProgress`]:
+                  parentProgress,
+              });
+            }
+          }
+
+          // Update the user's progress array
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            const userProgress =
+              userData[`${currentCategory.toLowerCase()}WorkbookProgress`] ||
+              [];
+            console.log('user progress', userProgress);
+            if (!userProgress.includes(quizId)) {
+              userProgress.push(quizId);
+              await userRef.update({
+                [`${currentCategory.toLowerCase()}WorkbookProgress`]:
+                  userProgress,
+              });
+              setUserProgress(prevState => ({
+                ...prevState,
+                [`${currentCategory.toLowerCase()}WorkbookProgress`]:
+                  userProgress,
+              }));
+            }
+          }
+        }
+      } catch (error) {
+        console.log('Error updating progress:', error);
+      }
+    }
     // Handle quiz answer logic
     setCurrentQuiz(null);
   };
 
   const calculateTotalProgress = () => {
+    const currentProgressArray =
+      userProgress[`${currentCategory.toLowerCase()}WorkbookProgress`] || [];
     return Math.floor(
-      (lessonsCompleted[currentCategory].length /
-        quizzes[currentCategory].length) *
-        100,
+      (currentProgressArray.length / quizzes[currentCategory].length) * 100,
     );
   };
 
   const renderQuiz = quiz => {
     switch (quiz.type) {
       case 'multipleChoice':
-        return <MultipleChoiceQuiz {...quiz} onAnswer={handleQuizAnswer} />;
+        return (
+          <MultipleChoiceQuiz
+            {...quiz}
+            onAnswer={answer => handleQuizAnswer(answer, quiz.id)}
+          />
+        );
       case 'blankSpace':
-        return <BlankSpaceQuiz {...quiz} onAnswer={handleQuizAnswer} />;
+        return (
+          <BlankSpaceQuiz
+            {...quiz}
+            onAnswer={answer => handleQuizAnswer(answer, quiz.id)}
+          />
+        );
       case 'matching':
-        return <MatchingQuiz {...quiz} onAnswer={handleQuizAnswer} />;
+        return (
+          <MatchingQuiz
+            {...quiz}
+            onAnswer={answer => handleQuizAnswer(answer, quiz.id)}
+          />
+        );
       case 'trueFalse':
-        return <TrueFalseQuiz {...quiz} onAnswer={handleQuizAnswer} />;
+        return (
+          <TrueFalseQuiz
+            {...quiz}
+            onAnswer={answer => handleQuizAnswer(answer, quiz.id)}
+          />
+        );
       default:
         return null;
     }
   };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <ImageBackground
       source={require('../../assets/bg.jpg')}
       style={styles.backgroundImage}>
       <View style={styles.container}>
-        <Text style={styles.heading}>{category}</Text>
+        <Text style={styles.heading}>{currentCategory} Workbook</Text>
+        {currentCategory === 'English' ? (
+          <>
+            {currentQuiz ? (
+              renderQuiz(currentQuiz)
+            ) : (
+              <ScrollView contentContainerStyle={styles.lessonListContainer}>
+                {quizzes[currentCategory].map((quiz, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.card,
+                      userProgress.englishWorkbookProgress.includes(quiz.id) &&
+                        styles.completedCard,
+                    ]}
+                    onPress={() => startQuiz(quiz)}>
+                    <View style={styles.cardContent}>
+                      <Text
+                        style={[
+                          styles.cardText,
+                          userProgress.englishWorkbookProgress.includes(
+                            quiz.id,
+                          ) && styles.completedCardText,
+                        ]}>
+                        {quiz.question}
+                      </Text>
+                      {}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+            <View style={styles.progressContainer}>
+              <Text>Total Progress:</Text>
+              <View style={styles.progressBar}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    {width: `${calculateTotalProgress()}%`},
+                  ]}
+                />
+              </View>
+              <Text>{calculateTotalProgress()}%</Text>
+            </View>
+          </>
         ) : (
           <>
             {currentQuiz ? (
@@ -320,7 +450,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', // translucent white background
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
   },
   heading: {
     fontSize: 24,
